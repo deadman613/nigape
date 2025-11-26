@@ -5,6 +5,8 @@ import { Home, Info, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { memo } from "react";
+import Iridescence from '@/bits/Iridescence';
+
 
 const navItems = [
   { name: "About", icon: Info, href: "About" },
@@ -72,13 +74,14 @@ export default function ContactPage() {
   return (
     <>
       {/* Background */}
-      <div className="fixed inset-0 -z-10">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/contactfinal.jpg')" }}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <Iridescence
+          color={[1, 1, 1]}        
+          mouseReact={false}       
+          amplitude={0.1}
+          speed={1.0}
         />
       </div>
-
       <Navbar />
 
       {/* HERO */}
@@ -88,7 +91,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight"
+            className="text-5xl md:text-7xl font-extrabold text-black mb-6 tracking-tight"
           >
             Contact Us
           </motion.h1>
@@ -97,7 +100,7 @@ export default function ContactPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="text-lg md:text-xl text-pink-100/90 leading-relaxed max-w-3xl mx-auto"
+            className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto"
           >
             Due to high volume of orders and interactions, it may take longer
             to respond. We appreciate your patience.
@@ -171,7 +174,7 @@ export default function ContactPage() {
                 FAQs
               </h3>
               <p className="text-pink-100/90 leading-relaxed">
-                Have a quick question?  
+                Have a quick question?
                 Check our FAQs for instant answers.
               </p>
               <a
