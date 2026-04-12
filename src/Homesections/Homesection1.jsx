@@ -48,11 +48,13 @@ export default function NigapeGallery() {
               />
               {/* Top-right Arrow Button */}
               <div className="absolute top-3 right-3 sm:top-4 sm:right-4 lg:top-5 lg:right-5">
-                <a href="/about-us">
-                  <button className="bg-black/80 backdrop-blur-sm text-white text-lg sm:text-xl font-bold w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg hover:bg-black hover:scale-110 transition-all duration-300 flex items-center justify-center border border-white/20">
-                    ↗
-                  </button>
-                </a>
+                <Link
+                  href="/about-us"
+                  aria-label="Visit About Us"
+                  className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-black/80 backdrop-blur-sm text-white text-lg sm:text-xl font-bold shadow-lg border border-white/20 transition-all duration-300 hover:bg-black hover:scale-110"
+                >
+                  ↗
+                </Link>
               </div>
             </div>
 

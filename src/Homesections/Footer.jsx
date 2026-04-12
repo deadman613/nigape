@@ -1,40 +1,9 @@
-"use client";
 import Link from 'next/link';
 import { Twitter, MessageCircle, Globe, Copyright } from 'lucide-react';
 
 export default function Footer() {
   return (
     <>
-      <style jsx global>{`
-        .bg-footer-main { background: #000000; }
-        .bg-top-glow { background: linear-gradient(to top, rgba(255, 64, 235, 0.15), transparent); }
-        .underline-pink { position: relative; }
-        .underline-pink::after {
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: -4px;
-          width: 32px;
-          height: 2px;
-          background: #FF40EB;
-          border-radius: 2px;
-          box-shadow: 0 0 12px #FF40EB;
-        }
-        .particle {
-          position: absolute;
-          width: 2px;
-          height: 2px;
-          background: #FF40EB;
-          border-radius: 50%;
-          opacity: 0.35;
-          animation: floatUp 6s infinite ease-in-out;
-        }
-        @keyframes floatUp {
-          0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-          50% { transform: translateY(-50px) translateX(15px); opacity: 0.7; }
-        }
-      `}</style>
-
       <footer className="relative w-full bg-footer-main border-t border-[#FF40EB]/20 overflow-hidden">
 
         <div className="absolute inset-0 bg-top-glow pointer-events-none" />

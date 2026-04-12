@@ -8,7 +8,6 @@ export default function ClientWrapper({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Wait for loader animation to complete
     const timer = setTimeout(() => {
       setLoading(false);
     }, 3000); // Adjust based on your loader duration
@@ -18,8 +17,8 @@ export default function ClientWrapper({ children }) {
 
   return (
     <>
+      {children}
       {loading && <Loader />}
-      {!loading && children}
     </>
   );
 }
