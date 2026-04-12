@@ -12,6 +12,7 @@ import Homesection1_1 from "@/Homesections/Homesection1_1";
 import Homesection7 from "@/Homesections/Homesection7";
 import Skills from "../Homesections/skills"
 import HomesectionPGP from "@/Homesections/HomesectionPGP";
+import HomesectionPG from "@/Homesections/HomesectionPG";
 import PopularDiplomaCourses from "@/Homesections/PopularDiplomaCourses";
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <Homesection1_1/>
       <HomeSection1 />
       <HomesectionPGP />
+      <HomesectionPG />
       <PopularDiplomaCourses />
       <HomeSection2 />
       <HomeSection3 />

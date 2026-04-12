@@ -21,13 +21,13 @@ function getPopularDiplomaCourses(limit = 3) {
 
 function getCourseImage(course) {
   const courseGraphicMap = {
-    "Diploma in Generative AI & Prompt Engineering": "/coursegraphic/Generative AI & Prompt Engineering (Diploma — 12 Months).png",
-    "Advanced Generative AI & Prompt Engineering": "/coursegraphic/Advanced Certification in Generative AI & Prompt Engineering (6 Months).png",
-    "AI Literacy for Everyone": "/coursegraphic/AI Literacy Course (1.5 Months).png",
-    "Generative AI for Professionals": "/coursegraphic/Generative AI for Professionals (4 Months).png",
-    "NLP Professional": "/coursegraphic/Natural Language Processing Professional (4 Months).png",
-    "Computer Vision Professional": "/coursegraphic/Computer Vision Professional (4 Months).png",
-    "Deep Learning Professional": "/coursegraphic/Deep Learning Professional (4 Months).png",
+    "Diploma in Generative AI & Prompt Engineering": "/coursegraphic/Generative AI & Prompt Engineering (Diploma — 12 Months).webp",
+    "Advanced Generative AI & Prompt Engineering": "/coursegraphic/Advanced Certification in Generative AI & Prompt Engineering (6 Months).webp",
+    "AI Literacy for Everyone": "/coursegraphic/AI Literacy Course (1.5 Months).webp",
+    "Generative AI for Professionals": "/coursegraphic/Generative AI for Professionals (4 Months).webp",
+    "NLP Professional": "/coursegraphic/Natural Language Processing Professional (4 Months).webp",
+    "Computer Vision Professional": "/coursegraphic/Computer Vision Professional (4 Months).webp",
+    "Deep Learning Professional": "/coursegraphic/Deep Learning Professional (4 Months).webp",
   };
 
   return courseGraphicMap[course.title] || course.image || "https://via.placeholder.com/800x450?text=Course+Image";
@@ -63,6 +63,7 @@ export default function PopularDiplomaCourses() {
           src={getCourseImage(course)}
           alt={course.title}
           fill
+          quality={90}
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />

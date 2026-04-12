@@ -78,10 +78,13 @@ export default function ResponsiveForm() {
                     type="tel"
                     id="phone"
                     name="phone"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={12}
                     value={formData.phone}
-                    onChange={handleChange}
+                    onChange={(e) => { const v = e.target.value.replace(/\D/g, ''); handleChange({ target: { name: 'phone', value: v } }); }}
                     className="w-full px-4 py-3 bg-gray-900 border-2 border-pink-500 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-pink-500/50 transition-all"
-                    placeholder="+1 (555) 000-0000"
+                    placeholder="9XXXXXXXXX"
                   />
                 </div>
                 <div>
