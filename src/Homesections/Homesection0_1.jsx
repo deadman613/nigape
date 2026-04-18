@@ -52,7 +52,7 @@ export default function AboutUsSection() {
           <div className="relative group overflow-hidden rounded-3xl aspect-[4/5] bg-gradient-to-br from-purple-900/30 to-indigo-900/30">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
             <img 
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" 
+              src="/Nigapepic/4.webp" 
               alt="AI Training"
               className="w-full h-full object-cover"
             />
@@ -82,7 +82,7 @@ export default function AboutUsSection() {
           <div className="relative group overflow-hidden rounded-3xl aspect-[4/5] bg-gradient-to-br from-indigo-900/30 to-purple-900/30">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
             <img 
-              src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80" 
+              src="/Nigapepic/5.webp" 
               alt="Corporate Learning"
               className="w-full h-full object-cover"
             />
@@ -112,7 +112,7 @@ export default function AboutUsSection() {
           <div className="relative group overflow-hidden rounded-3xl aspect-[4/5] bg-gradient-to-br from-purple-900/30 to-pink-900/30">
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
             <img 
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80" 
+              src="/Nigapepic/6.webp" 
               alt="Career Success"
               className="w-full h-full object-cover"
             />

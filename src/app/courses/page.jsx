@@ -156,7 +156,6 @@ export default function CoursesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDuration, setSelectedDuration] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showAll, setShowAll] = useState(false);
   const showFiltersRef = useRef(false);
   const [, forceUpdate] = useState(0);
 
@@ -214,7 +213,6 @@ export default function CoursesPage() {
     setSelectedCategory("all");
     setSelectedDuration("all");
     setSearchQuery("");
-    setShowAll(false);
   }, []);
 
   return (
@@ -357,9 +355,7 @@ export default function CoursesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 items-stretch">
             {filteredCourses.length > 0 ? (
-              filteredCourses
-                .slice(0, showAll ? filteredCourses.length : 6)
-                .map((course) => <CourseCard key={course.id} course={course} />)
+              filteredCourses.map((course) => <CourseCard key={course.id} course={course} />)
             ) : (
               <div className="col-span-3 text-center py-16 text-gray-400">
                 <p className="text-xl">No programs found matching your filters.</p>
@@ -373,18 +369,6 @@ export default function CoursesPage() {
               </div>
             )}
           </div>
-
-          {filteredCourses.length > 6 && (
-            <div className="text-center mt-12">
-              <button
-                type="button"
-                onClick={() => setShowAll((prev) => !prev)}
-                className="px-8 py-3 bg-[#FF40EB] text-white font-semibold rounded-xl shadow-lg shadow-[#FF40EB]/30 hover:shadow-xl hover:shadow-[#FF40EB]/50 transition-all duration-300"
-              >
-                {showAll ? "Show Less" : "Show All Programs"}
-              </button>
-            </div>
-          )}
         </div>
       </section>
 

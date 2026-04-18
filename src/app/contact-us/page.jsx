@@ -15,13 +15,21 @@ import Iridescence from '@/Homesections/bits/Iridescence.js';
 const socials = [
   {
     name: "Instagram",
-    label: "IG",
     href: "https://www.instagram.com/nigape.official/",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    ),
   },
   {
     name: "LinkedIn",
-    label: "IN",
     href: "https://www.linkedin.com/in/national-institute-genai-and-prompt-engineering-116711381/",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+      </svg>
+    ),
   },
 ];
 
@@ -90,16 +98,46 @@ export default function ContactPage() {
     message: "",
   });
   const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
+  const [formErrors, setFormErrors] = useState({});
+
+  const courseOptions = [
+    "Diploma in Generative AI & Prompt Engineering",
+    "Advanced Generative AI & Prompt Engineering",
+    "AI Literacy for Everyone",
+    "Generative AI for Professionals",
+    "NLP Professional",
+    "Computer Vision Professional",
+    "Deep Learning Professional",
+  ];
 
   const appsScriptUrl = process.env.NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL;
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = "Name is required";
+    if (!formData.email.trim()) errors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = "Enter a valid email";
+    if (!formData.phone.trim()) errors.phone = "Phone is required";
+    else if (!/^[6-9]\d{9}$/.test(formData.phone.replace(/\s|-/g, ""))) errors.phone = "Enter a valid 10-digit Indian mobile number";
+    if (!formData.message.trim()) errors.message = "Message is required";
+    return errors;
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (formErrors[name]) setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+    setFormErrors({});
 
     if (!appsScriptUrl) {
       setSubmitState({
@@ -200,44 +238,59 @@ export default function ContactPage() {
             </div>
 
             <form className="space-y-5 sm:space-y-7" onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="name"
-                placeholder="* Your Name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border border-pink-500/30 rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg"
-              />
+              <div>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="* Your Name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg ${formErrors.name ? 'border-red-400' : 'border-pink-500/30'}`}
+                />
+                {formErrors.name && <p className="text-red-400 text-xs mt-1">{formErrors.name}</p>}
+              </div>
 
-              <input
-                type="email"
-                name="email"
-                placeholder="* Your Email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border border-pink-500/30 rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg"
-              />
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="* Your Email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg ${formErrors.email ? 'border-red-400' : 'border-pink-500/30'}`}
+                />
+                {formErrors.email && <p className="text-red-400 text-xs mt-1">{formErrors.email}</p>}
+              </div>
 
-              <input
-                type="tel"
-                name="phone"
-                placeholder="* Phone Number"
-                required
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border border-pink-500/30 rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg"
-              />
+              <div>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="* Phone Number"
+                  required
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={10}
+                  value={formData.phone}
+                  onChange={(e) => { const v = e.target.value.replace(/\D/g, ''); handleChange({ target: { name: 'phone', value: v } }); }}
+                  className={`w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg ${formErrors.phone ? 'border-red-400' : 'border-pink-500/30'}`}
+                />
+                {formErrors.phone && <p className="text-red-400 text-xs mt-1">{formErrors.phone}</p>}
+              </div>
 
-              <input
-                type="text"
+              <select
                 name="course"
-                placeholder="Course Interested In"
                 value={formData.course}
                 onChange={handleChange}
-                className="w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border border-pink-500/30 rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg"
-              />
+                className={`w-full px-4 sm:px-6 py-4 sm:py-5 bg-black/80 border rounded-xl focus:outline-none focus:border-pink-400 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg ${formData.course ? 'text-white' : 'text-pink-300/70'} border-pink-500/30`}
+              >
+                <option value="" className="text-gray-400 bg-black">Course Interested In (optional)</option>
+                {courseOptions.map((c) => (
+                  <option key={c} value={c} className="bg-black text-white">{c}</option>
+                ))}
+              </select>
 
               <input
                 type="text"
@@ -248,15 +301,18 @@ export default function ContactPage() {
                 className="w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border border-pink-500/30 rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 backdrop-blur-sm text-base sm:text-lg"
               />
 
-              <textarea
-                rows={5}
-                name="message"
-                placeholder="Tell us about your current background and AI career goal..."
-                required
-                value={formData.message}
-                onChange={handleChange}
-                className="w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border border-pink-500/30 rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 resize-none backdrop-blur-sm text-base sm:text-lg"
-              />
+              <div>
+                <textarea
+                  rows={5}
+                  name="message"
+                  placeholder="Tell us about your current background and AI career goal... *"
+                  required
+                  value={formData.message}
+                  onChange={handleChange}
+                  className={`w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/10 border rounded-xl text-white placeholder-pink-300/70 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 resize-none backdrop-blur-sm text-base sm:text-lg ${formErrors.message ? 'border-red-400' : 'border-pink-500/30'}`}
+                />
+                {formErrors.message && <p className="text-red-400 text-xs mt-1">{formErrors.message}</p>}
+              </div>
 
               {submitState.status !== "idle" && (
                 <p
@@ -327,9 +383,9 @@ export default function ContactPage() {
                     rel="noopener noreferrer"
                     aria-label={social.name}
                     title={social.name}
-                    className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white/10 border border-pink-500/40 flex items-center justify-center text-base sm:text-lg font-semibold hover:bg-pink-500/20 hover:border-pink-400 transition-all duration-300"
+                    className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white/10 border border-pink-500/40 flex items-center justify-center text-[#FF40EB] hover:bg-pink-500/20 hover:border-pink-400 transition-all duration-300"
                   >
-                    {social.label}
+                    {social.icon}
                   </a>
                 ))}
               </div>

@@ -15,7 +15,7 @@ const jobs = [
 ];
 
 const demandCfg = {
-  "Explosive":  { bg:"#FF40EB",  border:"rgba(255,64,235,0.35)",  color:"#FF40EB", pulse:true  },
+  "Explosive":  { bg:"#FF40EB",  border:"rgba(255,64,235,0.35)",  color:"#FFffff", pulse:true  },
   "Very High":  { bg:"rgba(255,64,235,0.10)", border:"rgba(255,64,235,0.30)", color:"#FF40EB", pulse:false },
   "High":       { bg:"rgba(255,255,255,0.07)", border:"rgba(255,255,255,0.20)", color:"#fff",    pulse:false },
   "Steady":     { bg:"rgba(150,150,150,0.08)", border:"rgba(150,150,150,0.20)", color:"#888",    pulse:false },

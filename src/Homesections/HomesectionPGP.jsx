@@ -1,4 +1,5 @@
-import { Calendar, GraduationCap, Briefcase } from "lucide-react";
+import { Calendar, GraduationCap, Briefcase, ArrowRight, Building2 } from "lucide-react";
+import Link from "next/link";
 
 const years = [
   {
@@ -14,37 +15,43 @@ const years = [
     points: [
       "Choose focused tracks based on your goals and strengths.",
       "Work on industry-style projects with portfolios and reviews.",
-      "Improve communication, collaboration, and problem-solving skills.",
+      "Weekly trips, social impact projects, and fun club activities.",
     ],
   },
   {
     title: "Year 3: Internship + Career Launch",
     points: [
       "Capstone implementation with deployment-ready outcomes.",
-      "Interview preparation, resume building, and job-readiness coaching.",
+      "Annual outstation business tour to top tech cities.",
       "Career guidance to transition confidently into AI-first roles.",
     ],
   },
 ];
 
+const universities = [
+  { name: "DU SOL", full: "University of Delhi – School of Open Learning", badge: "Government", color: "text-[#FF40EB]", bg: "bg-[#FF40EB]/10", border: "border-[#FF40EB]/30" },
+  { name: "Jain University", full: "Jain (Deemed-to-be University), Bengaluru", badge: "Private – NAAC A++", color: "text-[#9234eb]", bg: "bg-[#9234eb]/10", border: "border-[#9234eb]/30" },
+];
+
 export default function HomesectionPGP() {
   return (
-    <section className="bg-black py-16 px-4 sm:px-6" id="post-graduation-program">
+    <section className="bg-black py-16 px-4 sm:px-6" id="degree-programs">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#FF40EB]/40 bg-[#FF40EB]/10 px-4 py-2 text-sm font-semibold text-[#FF40EB]">
-            <Calendar className="h-4 w-4" />
-            3-Year Program Highlight
+            <GraduationCap className="h-4 w-4" />
+            3-Year Degree Programs
           </span>
           <h2 className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
-           Graduation Program Designed for Long-Term Career Growth
+            Degree Programs in Artificial Intelligence
           </h2>
           <p className="mt-4 text-gray-300 text-base sm:text-lg">
-            A structured roadmap that takes learners from foundation to specialization to placement support in 3 focused years.
+            A full 3-year university degree combining real AI skills, campus life, industry trips, and placement support — from DU SOL or Jain University.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* Year cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-10">
           {years.map((year, index) => (
             <article
               key={year.title}
@@ -71,6 +78,30 @@ export default function HomesectionPGP() {
               </ul>
             </article>
           ))}
+        </div>
+
+        {/* University chips */}
+        <div className="flex flex-wrap justify-center gap-4 mb-10">
+          {universities.map((u) => (
+            <div key={u.name} className={`flex items-center gap-3 rounded-xl border ${u.border} ${u.bg} px-5 py-3`}>
+              <Building2 className={`w-4 h-4 ${u.color}`} />
+              <div>
+                <p className={`text-sm font-bold ${u.color}`}>{u.name}</p>
+                <p className="text-xs text-gray-400">{u.full}</p>
+              </div>
+              <span className={`text-xs px-2 py-0.5 rounded-full ${u.bg} ${u.color} border ${u.border}`}>{u.badge}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="text-center">
+          <Link
+            href="/programs/degree-in-ai"
+            className="inline-flex items-center gap-2 rounded-full bg-[#FF40EB] px-8 py-3.5 font-bold text-white shadow-[0_0_30px_rgba(255,64,235,0.4)] hover:shadow-[0_0_50px_rgba(255,64,235,0.6)] hover:scale-105 transition"
+          >
+            Explore Degree Programs <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>

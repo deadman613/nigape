@@ -21,7 +21,7 @@ export default function RoadmapSection() {
       desc:
         "Every class is led by instructors who have worked in the AI industry. They guide you through projects, give one-on-one feedback, and teach you to think like AI engineers.",
       image:
-        "https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/689b542c5ac27db204a0b600_freelancers-hero.webp",
+        "/Nigapepic/2.webp",
     },
     {
       phase: "Phase 3",
@@ -30,7 +30,7 @@ export default function RoadmapSection() {
       desc:
         "Courses follow a Learn → Apply → Showcase model. You learn a concept, immediately apply it to a mini-project, and then present it for review – replicating corporate sprints.",
       image:
-        "https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/689a491aa21232a64a940747_solutions-styling-urban-development.webp",
+        "/Nigapepic/3.webp",
     },
     {
       phase: "Phase 4",
@@ -39,7 +39,7 @@ export default function RoadmapSection() {
       desc:
         "Assignments are derived from actual industry challenges. You won't build 'toy' examples; you'll tackle case studies and use real datasets under expert guidance.",
       image:
-        "https://cdn.prod.website-files.com/686294e263eb7e215bd232f7/689a491a35ad9b5025ada1da_solutions-styling-cms-travelogic.webp",
+        "/Nigapepic/4.webp",
     },
   ];
 

@@ -361,3 +361,21 @@ code, pre {
   filter: blur(2px);
   transform: translateY(20px);
 }
+/* ============================================= */
+/* Swiper Testimonials Overrides                 */
+/* ============================================= */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #FF40EB !important;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 1.25rem !important;
+}
+.swiper-pagination-bullet {
+  background: #FF40EB !important;
+  opacity: 0.5;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+}

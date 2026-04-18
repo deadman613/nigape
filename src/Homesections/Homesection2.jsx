@@ -59,11 +59,18 @@ export default function HomeSection2() {
           <p className="text-gray-400 italic text-lg mb-8">
             Ready to start with India's dedicated GenAI and Prompt Engineering institute?
           </p>
-          <Link href="/courses" passHref>
-            <button className="px-8 py-4 bg-[#FF40EB] hover:bg-pink-600 text-white font-bold rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-[#FF40EB]/30 hover:shadow-xl transform hover:-translate-y-0.5">
-              Explore Courses
-            </button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="?enroll=1" passHref>
+              <button className="px-8 py-4 bg-[#FF40EB] hover:bg-pink-600 text-white font-bold rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-[#FF40EB]/30 hover:shadow-xl transform hover:-translate-y-0.5">
+                Enroll Now
+              </button>
+            </Link>
+            <Link href="/courses" passHref>
+              <button className="px-8 py-4 border-2 border-[#FF40EB] text-white hover:bg-[#FF40EB]/10 font-bold rounded-full text-lg transition-all duration-300 shadow-lg transform hover:-translate-y-0.5">
+                Explore Courses
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

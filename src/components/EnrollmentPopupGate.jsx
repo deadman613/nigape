@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { courses } from "@/Data/data";
 
 const initialForm = {
   name: "",
@@ -120,18 +121,24 @@ export default function EnrollmentPopupGate() {
                 name="phone"
                 placeholder="Phone Number"
                 required
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={10}
                 value={formData.phone}
-                onChange={handleChange}
+                onChange={(e) => { const v = e.target.value.replace(/\D/g, ''); handleChange({ target: { name: 'phone', value: v } }); }}
                 className="w-full px-4 py-3 border border-[#FF40EB]/30 rounded-lg focus:outline-none focus:border-[#FF40EB] bg-black/80 text-white placeholder-gray-400"
               />
-              <input
-                type="text"
+              <select
                 name="course"
-                placeholder="Course Interested In"
                 value={formData.course}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-[#FF40EB]/30 rounded-lg focus:outline-none focus:border-[#FF40EB] bg-black/80 text-white placeholder-gray-400"
-              />
+                className={`w-full px-4 py-3 border border-[#FF40EB]/30 rounded-lg focus:outline-none focus:border-[#FF40EB] bg-black/80 text-white ${!formData.course ? 'text-gray-400' : ''}`}
+              >
+                <option value="" className="bg-black text-gray-400">Course Interested In</option>
+                {courses.map((c) => (
+                  <option key={c.id} value={c.title} className="bg-black text-white">{c.title}</option>
+                ))}
+              </select>
               <input
                 type="text"
                 name="city"
