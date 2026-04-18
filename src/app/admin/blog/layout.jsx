@@ -8,6 +8,8 @@ export const metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogAdminLayout({ children }) {
   await requireAdminUser();
   return <AdminLayout>{children}</AdminLayout>;

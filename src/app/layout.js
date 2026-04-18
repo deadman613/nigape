@@ -1,4 +1,5 @@
 // app/layout.js
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "../Homesections/Header.jsx";
@@ -20,6 +21,27 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "NIGAPE - GK2 Delhi Institute of Generative AI & Prompt Engineering",
   description: "India-first institute dedicated to Generative AI and Prompt Engineering careers.",
+  openGraph: {
+    title: "NIGAPE - GK2 Delhi Institute of Generative AI & Prompt Engineering",
+    description: "India-first institute dedicated to Generative AI and Prompt Engineering careers.",
+    type: "website",
+    url: "https://nigape.com",
+    siteName: "NIGAPE",
+    images: [
+      {
+        url: "https://nigape.com/Nigapepic/nigape1.png",
+        width: 1200,
+        height: 630,
+        alt: "NIGAPE - GK2 Delhi Institute of Generative AI & Prompt Engineering",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NIGAPE - GK2 Delhi Institute of Generative AI & Prompt Engineering",
+    description: "India-first institute dedicated to Generative AI and Prompt Engineering careers.",
+    images: ["https://nigape.com/Nigapepic/nigape1.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -53,7 +75,9 @@ export default function RootLayout({ children }) {
         <ClientWrapper>
           <Header />
           {children}
-          <EnrollmentPopupGate />
+          <Suspense fallback={null}>
+            <EnrollmentPopupGate />
+          </Suspense>
           <Footer />
           <FloatingContactButtons />
         </ClientWrapper>

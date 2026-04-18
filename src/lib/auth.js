@@ -16,8 +16,6 @@ const ensureStrongAdminPassword = () => {
   }
 };
 
-ensureStrongAdminPassword();
-
 const getSecret = () => {
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) {
@@ -42,6 +40,7 @@ const safeEqual = (a, b) => {
 };
 
 export const validateAdminCredentials = (username, password) => {
+  ensureStrongAdminPassword();
   const adminUser = process.env.ADMIN_USERNAME || "admin@example.com";
   const adminPass = process.env.ADMIN_PASSWORD || "";
   return username === adminUser && password === adminPass;
@@ -87,8 +86,7 @@ const resolveMaybePromise = async (value) => {
 const getCookieStore = async () => {
   try {
     return await resolveMaybePromise(cookies());
-  } catch (error) {
-    console.warn("getCookieStore: cookies() unavailable in this context", error);
+  } catch {
     return null;
   }
 };
