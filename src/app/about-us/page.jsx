@@ -175,8 +175,44 @@ export default function About() {
     };
   }, [updateCursor]);
 
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "National Institute of Generative Ai + Prompt Engineering",
+    "image": "https://nigape.com/Nigapepic/nigape.svg",
+    "@id": "",
+    "url": "https://nigape.com/",
+    "telephone": "+91 74281 14918",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2 Floor, Design House Spacetime, Greater Kailash-1, Block S, Greater Kailash I, Greater Kailash, New Delhi, Delhi 110048",
+      "addressLocality": "south delhi",
+      "postalCode": "110048",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 28.54821,
+      "longitude": 77.23797
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sameAs": [
+      "https://www.instagram.com/nigape.official/",
+      "https://in.linkedin.com/in/national-institute-genai-and-prompt-engineering-116711381"
+    ]
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       {/* Floating Cursor Glow */}
       <div
         id="cursor-glow"
