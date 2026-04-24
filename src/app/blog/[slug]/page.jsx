@@ -4,6 +4,16 @@ import { notFound } from "next/navigation";
 import { getBaseUrl } from "@/lib/base-url";
 import "@/styles/blog.css";
 
+const formatDate = (value) =>
+  new Intl.DateTimeFormat("en", { dateStyle: "long" }).format(new Date(value));
+
+const toText = (html) => (html || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+const calculateReadingMinutes = (html) => {
+  const words = toText(html).split(" ").filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 220));
+};
+
 const fetchBlog = async (slug) => {
   const baseUrl = await getBaseUrl();
   const res = await fetch(`${baseUrl}/api/blog/${slug}`, {
@@ -82,6 +92,9 @@ export default async function BlogDetails(props) {
   const isPlaceholder = !hasCover;
   const baseUrl = await getBaseUrl();
   const canonical = `${baseUrl}/blog/${blog.slug}`;
+  const readingMinutes = calculateReadingMinutes(blog.content);
+  const publishedDate = formatDate(blog.createdAt);
+  const updatedDate = formatDate(blog.updatedAt ?? blog.createdAt);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -112,10 +125,31 @@ export default async function BlogDetails(props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <article aria-labelledby="blog-title">
-        <header>
-          <p className="eyebrow">{new Date(blog.createdAt).toLocaleDateString()}</p>
+        <header className="blog-detail__header">
+          <nav className="blog-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/blog">Blog</Link>
+            <span aria-hidden="true">/</span>
+            <span>{blog.title}</span>
+          </nav>
+
+          <p className="eyebrow">{publishedDate}</p>
           <h1 id="blog-title">{blog.title}</h1>
-          {blog.tags?.length ? <p className="tags">{blog.tags.join(" / ")}</p> : null}
+
+          <div className="blog-detail__meta" aria-label="Post details">
+            <span>{readingMinutes} min read</span>
+            <span>Updated {updatedDate}</span>
+            <span>By Editorial Team</span>
+          </div>
+
+          {blog.tags?.length ? (
+            <div className="tags" aria-label="Post tags">
+              {blog.tags.map((tag) => (
+                <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`}>
+                  #{tag}
+                </Link>
+              ))}
+            </div>
+          ) : null}
         </header>
 
         <div className={`cover${isPlaceholder ? " cover--placeholder" : ""}`}>
@@ -133,13 +167,28 @@ export default async function BlogDetails(props) {
 
         <div className="content" dangerouslySetInnerHTML={{ __html: blog.content }} />
 
+        <section className="blog-detail__footer-cta" aria-label="Continue reading">
+          <p>Want more insights like this?</p>
+          <div>
+            <Link href="/blog" className="btn btn--ghost">
+              Browse all posts
+            </Link>
+            <Link href="/contact-us" className="btn btn--primary">
+              Contact team
+            </Link>
+          </div>
+        </section>
+
         {related?.data?.length ? (
           <aside className="related">
             <h3>Related Posts</h3>
             <ul>
               {related.data.map((item) => (
                 <li key={item.id}>
-                  <Link href={`/blog/${item.slug}`}>{item.title}</Link>
+                  <Link href={`/blog/${item.slug}`}>
+                    <span>{item.title}</span>
+                    <small>{formatDate(item.createdAt)}</small>
+                  </Link>
                 </li>
               ))}
             </ul>

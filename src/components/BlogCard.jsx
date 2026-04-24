@@ -17,6 +17,7 @@ const BlogCard = ({ blog }) => {
   const isExternalCover = Boolean(rawCover && /^(https?:)?\/\//i.test(rawCover));
   const hasCover = Boolean(rawCover);
   const cover = hasCover ? rawCover : "/placeholder.svg";
+  const tags = blog.tags?.slice(0, 3) || [];
 
   return (
     <article className="blog-card">
@@ -38,16 +39,27 @@ const BlogCard = ({ blog }) => {
       </Link>
       <div className="blog-card__body">
         <div className="blog-card__meta">
-          <span>{formatDate(blog.createdAt)}</span>
-          <span>&bull;</span>
-          <span>{blog.tags?.slice(0, 2).join(" • ") || "General"}</span>
+          <time dateTime={blog.createdAt}>{formatDate(blog.createdAt)}</time>
+          <span className="dot" aria-hidden="true">
+            •
+          </span>
+          <span>{tags.length ? `${tags.length} topics` : "General"}</span>
         </div>
         <h3>
           <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
         </h3>
         <p>{toExcerpt(blog.content)}</p>
+        {tags.length ? (
+          <div className="blog-card__tags" aria-label="Post topics">
+            {tags.map((tag) => (
+              <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`}>
+                #{tag}
+              </Link>
+            ))}
+          </div>
+        ) : null}
         <Link href={`/blog/${blog.slug}`} className="blog-card__cta">
-          Continue reading →
+          Continue reading
         </Link>
       </div>
     </article>
