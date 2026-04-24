@@ -7,13 +7,30 @@ const CSRF_COOKIE = "admin_csrf";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 12; // 12 hours
 const PASSWORD_POLICY = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{12,}$/;
 
-const ensureStrongAdminPassword = () => {
+const getAdminPasswordPolicyError = () => {
   const adminPass = process.env.ADMIN_PASSWORD || "";
   if (!PASSWORD_POLICY.test(adminPass)) {
-    throw new Error(
-      "ADMIN_PASSWORD must be at least 12 characters and include upper, lower, number, and special characters"
-    );
+    return "ADMIN_PASSWORD must be at least 12 characters and include upper, lower, number, and special characters";
   }
+  return null;
+};
+
+export const getAdminConfigError = () => {
+  const adminUser = process.env.ADMIN_USERNAME;
+  if (!adminUser?.trim()) {
+    return "ADMIN_USERNAME is required for admin authentication";
+  }
+
+  const passwordPolicyError = getAdminPasswordPolicyError();
+  if (passwordPolicyError) {
+    return passwordPolicyError;
+  }
+
+  if (!process.env.ADMIN_SESSION_SECRET) {
+    return "ADMIN_SESSION_SECRET is required for admin authentication";
+  }
+
+  return null;
 };
 
 const getSecret = () => {
@@ -40,7 +57,10 @@ const safeEqual = (a, b) => {
 };
 
 export const validateAdminCredentials = (username, password) => {
-  ensureStrongAdminPassword();
+  const configError = getAdminConfigError();
+  if (configError) {
+    return false;
+  }
   const adminUser = process.env.ADMIN_USERNAME || "admin@example.com";
   const adminPass = process.env.ADMIN_PASSWORD || "";
   return username === adminUser && password === adminPass;
