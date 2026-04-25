@@ -36,6 +36,11 @@ const controls = [
     isActive: (editor) => editor.isActive("heading", { level: 3 }),
   },
   {
+    label: "H1",
+    command: (editor) => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+    isActive: (editor) => editor.isActive("heading", { level: 1 }),
+  },
+  {
     label: "•",
     command: (editor) => editor.chain().focus().toggleBulletList().run(),
     isActive: (editor) => editor.isActive("bulletList"),
@@ -44,6 +49,16 @@ const controls = [
     label: "1.",
     command: (editor) => editor.chain().focus().toggleOrderedList().run(),
     isActive: (editor) => editor.isActive("orderedList"),
+  },
+  {
+    label: "\"",
+    command: (editor) => editor.chain().focus().toggleBlockquote().run(),
+    isActive: (editor) => editor.isActive("blockquote"),
+  },
+  {
+    label: "<>",
+    command: (editor) => editor.chain().focus().toggleCodeBlock().run(),
+    isActive: (editor) => editor.isActive("codeBlock"),
   },
 ];
 

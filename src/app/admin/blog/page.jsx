@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Archive, CircleCheckBig, Clock3, FileText, PenSquare } from "lucide-react";
 import DeleteBlogButton from "@/components/DeleteBlogButton";
 import prisma from "@/lib/prisma";
 
@@ -19,63 +20,106 @@ export default async function AdminBlogPage() {
     console.error(error);
   }
 
-  const totalTags = blogs.reduce((count, blog) => count + (blog.tags?.length || 0), 0);
-  const latestPost = blogs[0];
+  const totalPosts = blogs.length;
+  const publishedCount = blogs.length;
+  const draftsCount = 0;
+  const archivedCount = 0;
+  const recentPosts = blogs.slice(0, 8);
+  const stats = [
+    { label: "Total Posts", value: totalPosts, icon: FileText, tone: "total" },
+    { label: "Published", value: publishedCount, icon: CircleCheckBig, tone: "published" },
+    { label: "Drafts", value: draftsCount, icon: Clock3, tone: "drafts" },
+    { label: "Archived", value: archivedCount, icon: Archive, tone: "archived" },
+  ];
 
   return (
-    <section className="admin-panel">
-      <header className="admin-panel__header">
+    <section className="admin-dashboard">
+      <header className="admin-dashboard__header">
         <div>
-          <p className="eyebrow">Content Hub</p>
-          <h1>Blog Control Panel</h1>
-          <p>Manage, update, and publish every article powering your sites from one workspace.</p>
+          <h1>Dashboard</h1>
+          <p>Overview of your blog</p>
         </div>
-        <Link href="/admin/blog/create" className="btn btn--primary">
-          + New Post
+        <Link href="/admin/blog/create" className="btn btn--primary admin-new-post-btn">
+          <PenSquare size={18} aria-hidden="true" />
+          <span>New Post</span>
         </Link>
       </header>
 
       <div className="admin-kpi-grid" aria-label="Blog metrics">
-        <article>
-          <h3>{blogs.length}</h3>
-          <p>Total Posts</p>
-        </article>
-        <article>
-          <h3>{totalTags}</h3>
-          <p>Total Tags Used</p>
-        </article>
-        <article>
-          <h3>{latestPost ? formatDate(latestPost.createdAt) : "-"}</h3>
-          <p>Last Published</p>
-        </article>
-      </div>
+        {stats.map((item) => {
+          const Icon = item.icon;
 
-      {blogs.length ? (
-        <div className="admin-post-grid">
-          {blogs.map((blog) => (
-            <article key={blog.id} className="admin-post-card">
+          return (
+            <article key={item.label} className={`admin-kpi-card admin-kpi-card--${item.tone}`}>
+              <span className="admin-kpi-card__icon" aria-hidden="true">
+                <Icon size={22} />
+              </span>
               <div>
-                <h3>{blog.title}</h3>
-                <p className="admin-table__meta">Published {formatDate(blog.createdAt)}</p>
-                <p className="admin-post-card__slug">/blog/{blog.slug}</p>
-                <p className="admin-post-card__tags">{blog.tags?.length ? blog.tags.join(" • ") : "No tags"}</p>
-              </div>
-
-              <div className="admin-table__actions">
-                <Link href={`/blog/${blog.slug}`} className="btn btn--ghost" target="_blank" rel="noreferrer">
-                  View
-                </Link>
-                <Link href={`/admin/blog/edit/${blog.id}`} className="btn">
-                  Edit
-                </Link>
-                <DeleteBlogButton id={blog.id} title={blog.title} />
+                <h3>{item.value}</h3>
+                <p>{item.label}</p>
               </div>
             </article>
-          ))}
-        </div>
-      ) : (
-        <p className="empty">No posts yet. Click “+ New Post” to publish your first article.</p>
-      )}
+          );
+        })}
+      </div>
+
+      <section className="admin-table-card" aria-label="Recent posts">
+        <header className="admin-table-card__header">
+          <h2>Recent Posts</h2>
+          <Link href="/admin/blog" className="admin-table-card__link">
+            View all
+          </Link>
+        </header>
+
+        {recentPosts.length ? (
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th scope="col">Title</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Date</th>
+                  <th scope="col" className="admin-table__action-col">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentPosts.map((blog) => (
+                  <tr key={blog.id}>
+                    <td>
+                      <p className="admin-table__title">{blog.title}</p>
+                      <p className="admin-table__meta">/blog/{blog.slug}</p>
+                    </td>
+                    <td>
+                      <span className="admin-status-pill">Published</span>
+                    </td>
+                    <td>{formatDate(blog.createdAt)}</td>
+                    <td>
+                      <div className="admin-table__actions">
+                        <Link href={`/admin/blog/edit/${blog.id}`} className="btn btn--ghost admin-btn--sm">
+                          Edit
+                        </Link>
+                        <Link
+                          href={`/blog/${blog.slug}`}
+                          className="btn btn--ghost admin-btn--sm"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View
+                        </Link>
+                        <DeleteBlogButton id={blog.id} title={blog.title} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="empty">No posts yet. Click New Post to publish your first article.</p>
+        )}
+      </section>
     </section>
   );
 }

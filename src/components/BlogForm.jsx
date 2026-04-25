@@ -24,6 +24,23 @@ const clientSlugify = (raw = "") =>
 
 const slugHelpId = "blog-form-slug-help";
 const tagsHelpId = "blog-form-tags-help";
+const statusHelpId = "blog-form-status-help";
+
+const formatDateTimeInput = (value) => {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+};
 
 const BlogForm = ({ initialData = null, mode = "create" }) => {
   const router = useRouter();
@@ -44,6 +61,7 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
   const wordCount = contentText ? contentText.split(" ").length : 0;
   const readTime = Math.max(1, Math.ceil(wordCount / 220));
   const normalizedSlug = (formValues.slug || clientSlugify(formValues.title) || "").trim();
+  const postDate = formatDateTimeInput(initialData?.createdAt);
   const tagCount = formValues.tags
     .split(",")
     .map((tag) => tag.trim())
@@ -155,9 +173,8 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
     <form className="admin-form" onSubmit={handleSubmit} aria-busy={submitting || uploading}>
       <header className="admin-form__header">
         <div>
-          <p className="eyebrow">Publishing Studio</p>
-          <h2>{formTitle}</h2>
-          <p>Build, optimize, and publish posts from a single workspace.</p>
+          <h2>{mode === "edit" ? "Edit Blog Post" : "Create New Blog Post"}</h2>
+          <p>Write your content and optimize for search engines</p>
         </div>
         <div className="admin-form__meta" aria-label="Writing stats">
           <span>{wordCount} words</span>
@@ -166,50 +183,97 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
         </div>
       </header>
 
-      <div className="blog-workspace">
-        <section className="blog-workspace__main">
-          <label className="field field--title">
-            <span>Title</span>
+      <div className="admin-form__tabs" role="tablist" aria-label="Editor sections">
+        <button type="button" className="admin-form__tab is-active" role="tab" aria-selected="true">
+          Content
+        </button>
+        <button type="button" className="admin-form__tab" role="tab" aria-selected="false" disabled>
+          SEO
+        </button>
+        <button type="button" className="admin-form__tab" role="tab" aria-selected="false" disabled>
+          Schema / JSON-LD
+        </button>
+      </div>
+
+      <section className="admin-form__content" aria-label="Post editor">
+        <label className="field field--title">
+          <span>Title *</span>
+          <input
+            type="text"
+            name="title"
+            required
+            maxLength={140}
+            value={formValues.title}
+            onChange={(event) => setField("title", event.target.value)}
+            placeholder="Post title"
+          />
+          <small>{titleLength}/140</small>
+        </label>
+
+        <label className="field">
+          <span>Slug *</span>
+          <div className="field__slug-row">
+            <span className="field__slug-prefix">/blog/</span>
             <input
               type="text"
-              name="title"
-              required
-              maxLength={140}
-              value={formValues.title}
-              onChange={(event) => setField("title", event.target.value)}
-              placeholder="Write a clear, benefit-driven headline"
+              name="slug"
+              value={formValues.slug}
+              onChange={(event) => {
+                setSlugTouched(true);
+                setField("slug", clientSlugify(event.target.value));
+              }}
+              aria-describedby={slugHelpId}
+              placeholder="post-slug"
             />
-            <small>{titleLength}/140</small>
-          </label>
+          </div>
+          <small id={slugHelpId}>Auto-generated from title. You can edit it before publishing.</small>
+        </label>
 
-          <label className="editor-label">
-            <span>Content</span>
-            <BlogEditor value={formValues.content} onChange={(html) => setField("content", html)} />
-          </label>
+        <p className="slug-preview">Final URL: /blog/{normalizedSlug || "your-post-slug"}</p>
+
+        <label className="editor-label">
+          <span>Content *</span>
+          <BlogEditor value={formValues.content} onChange={(html) => setField("content", html)} />
+        </label>
+
+        <section className="admin-card">
+          <h3>Cover Image</h3>
+          <div className="admin-cover-grid">
+            <div>
+              <label className="field field--file">
+                <span>Upload image</span>
+                <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleFileChange} disabled={uploading} />
+                <small>
+                  {uploading ? "Uploading..." : "JPEG, PNG, and WebP only. Upload goes to ImgBB and URL is filled automatically."}
+                </small>
+              </label>
+
+              <label className="field field--cover-url">
+                <span>Or paste an image URL</span>
+                <input
+                  type="text"
+                  name="coverImg"
+                  placeholder="https://"
+                  value={formValues.coverImg}
+                  onChange={(event) => setField("coverImg", event.target.value)}
+                />
+              </label>
+            </div>
+
+            {formValues.coverImg?.trim() ? (
+              <div className="cover-preview">
+                <img src={formValues.coverImg} alt="Cover preview" loading="lazy" />
+              </div>
+            ) : (
+              <p className="cover-preview--empty">No cover selected yet.</p>
+            )}
+          </div>
         </section>
 
-        <aside className="blog-workspace__side" aria-label="Post settings">
-          <section className="admin-card">
-            <h3>Post Settings</h3>
+        <section className="admin-card">
+          <h3>Post Settings</h3>
 
-            <label className="field">
-              <span>Slug</span>
-              <input
-                type="text"
-                name="slug"
-                value={formValues.slug}
-                onChange={(event) => {
-                  setSlugTouched(true);
-                  setField("slug", clientSlugify(event.target.value));
-                }}
-                aria-describedby={slugHelpId}
-                placeholder="your-post-slug"
-              />
-              <small id={slugHelpId}>Auto-generated from title. You can edit it before publishing.</small>
-            </label>
-
-            <p className="slug-preview">/blog/{normalizedSlug || "your-post-slug"}</p>
-
+          <div className="admin-settings-grid">
             <label className="field">
               <span>Tags</span>
               <input
@@ -222,53 +286,34 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
               />
               <small id={tagsHelpId}>Comma-separated topics used for search and related posts.</small>
             </label>
-          </section>
 
-          <section className="admin-card">
-            <h3>Cover Image</h3>
             <label className="field">
-              <span>Image URL</span>
-              <input
-                type="text"
-                name="coverImg"
-                placeholder="https://"
-                value={formValues.coverImg}
-                onChange={(event) => setField("coverImg", event.target.value)}
-              />
+              <span>Status</span>
+              <input type="text" value="Published" readOnly aria-describedby={statusHelpId} />
+              <small id={statusHelpId}>Posts are published immediately after saving.</small>
             </label>
 
-            <label className="field field--file">
-              <span>Upload image</span>
-              <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleFileChange} disabled={uploading} />
-              <small>
-                {uploading
-                  ? "Uploading..."
-                  : "JPEG, PNG, and WebP only. Upload goes to ImgBB and URL is filled automatically."}
-              </small>
+            <label className="field">
+              <span>Published At</span>
+              <input type="text" value={postDate || "Will be set after publishing"} readOnly />
             </label>
 
-            {formValues.coverImg?.trim() ? (
-              <div className="cover-preview">
-                <img src={formValues.coverImg} alt="Cover preview" loading="lazy" />
-              </div>
-            ) : (
-              <p className="cover-preview--empty">No cover selected yet.</p>
-            )}
-          </section>
+            <label className="field">
+              <span>Author Name</span>
+              <input type="text" value="Admin" readOnly />
+            </label>
+          </div>
 
-          <section className="admin-card">
-            <h3>Publish Checklist</h3>
-            <ul className="publish-checklist">
-              {checklist.map((item) => (
-                <li key={item.label} className={item.ok ? "is-complete" : ""}>
-                  <span aria-hidden="true">{item.ok ? "✓" : "•"}</span>
-                  {item.label}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </aside>
-      </div>
+          <ul className="publish-checklist">
+            {checklist.map((item) => (
+              <li key={item.label} className={item.ok ? "is-complete" : ""}>
+                <span aria-hidden="true">{item.ok ? "✓" : "•"}</span>
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </section>
 
       {status.message ? (
         <p
@@ -281,7 +326,7 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
       ) : null}
 
       <div className="form-actions">
-        <button type="button" className="btn btn--ghost" onClick={() => router.push("/admin/blog")}> 
+        <button type="button" className="btn btn--ghost" onClick={() => router.push("/admin/blog")}>
           Cancel
         </button>
         <button type="submit" className="btn btn--primary" disabled={submitting || uploading}>
