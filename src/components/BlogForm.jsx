@@ -11,6 +11,10 @@ const baseState = {
   coverImg: "",
   tags: "",
   content: "",
+  excerpt: "",
+  author: "",
+  metaTitle: "",
+  metaDescription: "",
 };
 
 const clientSlugify = (raw = "") =>
@@ -25,6 +29,9 @@ const clientSlugify = (raw = "") =>
 const slugHelpId = "blog-form-slug-help";
 const tagsHelpId = "blog-form-tags-help";
 const statusHelpId = "blog-form-status-help";
+const excerptHelpId = "blog-form-excerpt-help";
+const metaTitleHelpId = "blog-form-meta-title-help";
+const metaDescHelpId = "blog-form-meta-desc-help";
 
 const formatDateTimeInput = (value) => {
   if (!value) {
@@ -49,8 +56,15 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
     ...initialData,
     tags: initialData?.tags?.join(", ") || initialData?.tags || "",
     content: initialData?.content || "",
+    excerpt: initialData?.excerpt || "",
+    author: initialData?.author || "",
+    metaTitle: initialData?.metaTitle || "",
+    metaDescription: initialData?.metaDescription || "",
   }));
   const [slugTouched, setSlugTouched] = useState(Boolean(initialData?.slug));
+  const [activeTab, setActiveTab] = useState("content");
+  const [schemaCopied, setSchemaCopied] = useState(false);
+  const [schemaOverride, setSchemaOverride] = useState(null);
   const [status, setStatus] = useState({ type: null, message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -71,7 +85,30 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
     { label: "Slug ready", ok: Boolean(normalizedSlug) },
     { label: "Content added", ok: wordCount > 0 },
     { label: "Cover image set", ok: Boolean(formValues.coverImg.trim()) },
+    { label: "Meta description set", ok: Boolean(formValues.metaDescription.trim()) },
   ];
+
+  const generatedJsonLd = useMemo(() => {
+    const obj = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: formValues.metaTitle.trim() || formValues.title.trim() || "Post Title",
+      description: formValues.metaDescription.trim() || formValues.excerpt.trim() || "",
+      image: formValues.coverImg.trim() || undefined,
+      author: {
+        "@type": "Person",
+        name: formValues.author.trim() || "Admin",
+      },
+      datePublished: initialData?.createdAt || new Date().toISOString(),
+      dateModified: initialData?.updatedAt || new Date().toISOString(),
+      url: `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${normalizedSlug}`,
+      keywords: formValues.tags,
+    };
+    Object.keys(obj).forEach((k) => obj[k] === undefined && delete obj[k]);
+    return JSON.stringify(obj, null, 2);
+  }, [formValues.metaTitle, formValues.title, formValues.metaDescription, formValues.excerpt, formValues.coverImg, formValues.author, formValues.tags, normalizedSlug, initialData]);
+
+  const jsonLd = schemaOverride !== null ? schemaOverride : generatedJsonLd;
 
   useEffect(() => {
     if (!slugTouched && formValues.title) {
@@ -135,6 +172,10 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
         coverImg: formValues.coverImg?.trim() || "",
         tags: formValues.tags,
         content: formValues.content,
+        excerpt: formValues.excerpt?.trim() || "",
+        author: formValues.author?.trim() || "",
+        metaTitle: formValues.metaTitle?.trim() || "",
+        metaDescription: formValues.metaDescription?.trim() || "",
       };
 
       const isEdit = mode === "edit" && initialData?.id;
@@ -184,18 +225,36 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
       </header>
 
       <div className="admin-form__tabs" role="tablist" aria-label="Editor sections">
-        <button type="button" className="admin-form__tab is-active" role="tab" aria-selected="true">
+        <button
+          type="button"
+          className={`admin-form__tab${activeTab === "content" ? " is-active" : ""}`}
+          role="tab"
+          aria-selected={activeTab === "content"}
+          onClick={() => setActiveTab("content")}
+        >
           Content
         </button>
-        <button type="button" className="admin-form__tab" role="tab" aria-selected="false" disabled>
+        <button
+          type="button"
+          className={`admin-form__tab${activeTab === "seo" ? " is-active" : ""}`}
+          role="tab"
+          aria-selected={activeTab === "seo"}
+          onClick={() => setActiveTab("seo")}
+        >
           SEO
         </button>
-        <button type="button" className="admin-form__tab" role="tab" aria-selected="false" disabled>
+        <button
+          type="button"
+          className={`admin-form__tab${activeTab === "schema" ? " is-active" : ""}`}
+          role="tab"
+          aria-selected={activeTab === "schema"}
+          onClick={() => setActiveTab("schema")}
+        >
           Schema / JSON-LD
         </button>
       </div>
 
-      <section className="admin-form__content" aria-label="Post editor">
+      <section className="admin-form__content" aria-label="Post editor" style={{ display: activeTab === "content" ? undefined : "none" }}>
         <label className="field field--title">
           <span>Title *</span>
           <input
@@ -300,7 +359,13 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
 
             <label className="field">
               <span>Author Name</span>
-              <input type="text" value="Admin" readOnly />
+              <input
+                type="text"
+                name="author"
+                placeholder="Admin"
+                value={formValues.author}
+                onChange={(event) => setField("author", event.target.value)}
+              />
             </label>
           </div>
 
@@ -314,6 +379,128 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
           </ul>
         </section>
       </section>
+
+      {/* SEO Tab */}
+      {activeTab === "seo" && (
+        <section className="admin-form__content" aria-label="SEO settings">
+          <section className="admin-card">
+            <h3>SEO Settings</h3>
+            <p style={{ marginBottom: "1rem", color: "var(--text-muted, #888)" }}>These fields control how your post appears in search engine results.</p>
+
+            <label className="field">
+              <span>Meta Title</span>
+              <input
+                type="text"
+                name="metaTitle"
+                maxLength={70}
+                placeholder={formValues.title || "SEO-optimized title (max 70 chars)"}
+                value={formValues.metaTitle}
+                onChange={(event) => setField("metaTitle", event.target.value)}
+                aria-describedby={metaTitleHelpId}
+              />
+              <small id={metaTitleHelpId}>
+                {formValues.metaTitle.length}/70 — Leave blank to use the post title.
+              </small>
+            </label>
+
+            <label className="field">
+              <span>Meta Description</span>
+              <textarea
+                name="metaDescription"
+                maxLength={160}
+                rows={3}
+                placeholder="Brief description shown in search results (max 160 chars)"
+                value={formValues.metaDescription}
+                onChange={(event) => setField("metaDescription", event.target.value)}
+                aria-describedby={metaDescHelpId}
+                style={{ resize: "vertical", width: "100%" }}
+              />
+              <small id={metaDescHelpId}>
+                {formValues.metaDescription.length}/160 — Aim for 120–160 characters.
+              </small>
+            </label>
+
+            <label className="field">
+              <span>Excerpt / Summary</span>
+              <textarea
+                name="excerpt"
+                rows={3}
+                placeholder="Short summary shown on blog listing cards"
+                value={formValues.excerpt}
+                onChange={(event) => setField("excerpt", event.target.value)}
+                aria-describedby={excerptHelpId}
+                style={{ resize: "vertical", width: "100%" }}
+              />
+              <small id={excerptHelpId}>Used on blog cards and as fallback meta description.</small>
+            </label>
+          </section>
+
+          <section className="admin-card">
+            <h3>SEO Preview</h3>
+            <div style={{ border: "1px solid #e0e0e0", borderRadius: "8px", padding: "1rem", background: "#fff" }}>
+              <p style={{ color: "#1a0dab", fontSize: "1.1rem", marginBottom: "0.25rem", fontWeight: 500 }}>
+                {formValues.metaTitle.trim() || formValues.title.trim() || "Post Title"}
+              </p>
+              <p style={{ color: "#006621", fontSize: "0.85rem", marginBottom: "0.25rem" }}>
+                {typeof window !== "undefined" ? window.location.origin : "https://yoursite.com"}/blog/{normalizedSlug || "post-slug"}
+              </p>
+              <p style={{ color: "#545454", fontSize: "0.9rem" }}>
+                {formValues.metaDescription.trim() || formValues.excerpt.trim() || "No meta description set. Add one to improve click-through rates."}
+              </p>
+            </div>
+          </section>
+        </section>
+      )}
+
+      {/* Schema / JSON-LD Tab */}
+      {activeTab === "schema" && (
+        <section className="admin-form__content" aria-label="Schema JSON-LD">
+          <section className="admin-card">
+            <h3>JSON-LD Structured Data</h3>
+            <p style={{ marginBottom: "1rem", color: "var(--text-muted, #888)" }}>
+              Auto-generated from your post data. You can edit it manually or re-generate to reset to the auto-generated version.
+            </p>
+            <div style={{ position: "relative" }}>
+              <textarea
+                rows={20}
+                value={jsonLd}
+                onChange={(e) => setSchemaOverride(e.target.value)}
+                spellCheck={false}
+                style={{ width: "100%", fontFamily: "monospace", fontSize: "0.82rem", background: "#1e1e1e", color: "#d4d4d4", borderRadius: "8px", padding: "1rem", resize: "vertical", border: "none", outline: "none" }}
+              />
+              <div style={{ position: "absolute", top: "0.5rem", right: "0.5rem", display: "flex", gap: "0.4rem" }}>
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  style={{ fontSize: "0.78rem", padding: "0.25rem 0.75rem" }}
+                  onClick={() => {
+                    setSchemaOverride(null);
+                  }}
+                  title="Reset to auto-generated schema"
+                >
+                  Re-generate
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  style={{ fontSize: "0.78rem", padding: "0.25rem 0.75rem" }}
+                  onClick={() => {
+                    navigator.clipboard.writeText(jsonLd).then(() => {
+                      setSchemaCopied(true);
+                      setTimeout(() => setSchemaCopied(false), 2000);
+                    });
+                  }}
+                >
+                  {schemaCopied ? "Copied!" : "Copy"}
+                </button>
+              </div>
+            </div>
+            <small style={{ marginTop: "0.5rem", display: "block" }}>
+              {schemaOverride !== null ? "\u270F\uFE0F Manually edited — click Re-generate to restore auto values." : "\u2728 Auto-generated from post fields."}
+            </small>
+          </section>
+        </section>
+      )}
 
       {status.message ? (
         <p
