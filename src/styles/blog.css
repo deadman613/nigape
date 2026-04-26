@@ -472,6 +472,74 @@
   padding-left: 0.95rem;
 }
 
+.blog-detail .content a {
+  color: var(--blog-accent-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+.blog-detail .content a:hover {
+  color: var(--blog-accent);
+}
+
+.blog-detail .content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.4rem 0;
+  font-size: 0.97rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.blog-detail .content table th,
+.blog-detail .content table td {
+  border: 1px solid var(--blog-border);
+  padding: 0.55rem 0.85rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.blog-detail .content table th {
+  background: #f0ebe3;
+  font-weight: 700;
+  color: #211d17;
+}
+
+.blog-detail .content table tr:nth-child(even) td {
+  background: #faf7f3;
+}
+
+.blog-detail .content h1 {
+  color: #1f1a14;
+  margin: 1.8rem 0 0.72rem;
+}
+
+.blog-detail .content ul,
+.blog-detail .content ol {
+  padding-left: 1.4rem;
+  margin: 0.8rem 0;
+}
+
+.blog-detail .content li {
+  margin-bottom: 0.3rem;
+}
+
+.blog-detail .content pre {
+  background: #f4ece3;
+  border-radius: 0.6rem;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  font-size: 0.91rem;
+}
+
+.blog-detail .content code {
+  background: #f0e8df;
+  border-radius: 0.3rem;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+}
+
 .blog-detail__footer-cta {
   margin-top: 2rem;
   border: 1px solid #d6c9b7;

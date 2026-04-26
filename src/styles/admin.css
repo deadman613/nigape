@@ -673,6 +673,143 @@ small {
   padding: 0.85rem;
 }
 
+/* Toolbar separator */
+.editor__toolbar-sep {
+  display: inline-block;
+  width: 1px;
+  height: 1.4rem;
+  background: var(--admin-border);
+  margin: 0 0.2rem;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* Link styles inside ProseMirror */
+.editor .ProseMirror a {
+  color: #3b9eff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.editor .ProseMirror a:hover {
+  color: #70bcff;
+}
+
+/* Table styles inside ProseMirror */
+.editor .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: auto;
+  display: block;
+}
+
+.editor .ProseMirror table td,
+.editor .ProseMirror table th {
+  border: 1px solid #24314f;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  min-width: 80px;
+}
+
+.editor .ProseMirror table th {
+  background: #121d35;
+  font-weight: 700;
+  color: #dbe7ff;
+}
+
+.editor .ProseMirror table tr:nth-child(even) td {
+  background: rgba(143, 180, 255, 0.04);
+}
+
+/* Link dialog overlay */
+.editor__link-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 15, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.editor__link-dialog {
+  background: #0d162b;
+  border: 1px solid #24314f;
+  border-radius: 0.95rem;
+  padding: 1.4rem;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.editor__link-dialog-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f0f5ff;
+}
+
+.editor__link-input {
+  background: #0a1328;
+  border: 1px solid #24314f;
+  border-radius: 0.6rem;
+  color: #e8eefb;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.9rem;
+  outline: none;
+  width: 100%;
+}
+
+.editor__link-input:focus {
+  border-color: #2f78ff;
+}
+
+.editor__link-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.editor__link-btn {
+  border: 1px solid #24314f;
+  background: #121d33;
+  color: #cfdbf4;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 0.55rem;
+  cursor: pointer;
+}
+
+.editor__link-btn:hover {
+  border-color: #3a4f79;
+  background: #182741;
+}
+
+.editor__link-btn--primary {
+  background: #2f78ff;
+  border-color: #2f78ff;
+  color: #fff;
+}
+
+.editor__link-btn--primary:hover {
+  background: #1e61dd;
+  border-color: #1e61dd;
+}
+
+.editor__link-btn--remove {
+  background: rgba(239, 91, 110, 0.14);
+  border-color: rgba(239, 91, 110, 0.35);
+  color: #ffafba;
+}
+
+.editor__link-btn--remove:hover {
+  background: rgba(239, 91, 110, 0.25);
+}
+
 .form-status {
   padding: 0.85rem 1rem;
   border-radius: 0.8rem;
