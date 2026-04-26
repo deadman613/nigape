@@ -14,6 +14,14 @@ const toExcerpt = (html, maxLength = 210) => {
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 };
 
+const resolveCoverSrc = (coverImg, baseUrl) => {
+  const trimmed = coverImg?.trim();
+  if (!trimmed) return null;
+  if (/^(https?:)?\/\//i.test(trimmed) || trimmed.startsWith("/")) return trimmed;
+  if (!baseUrl) return `/${trimmed.replace(/^\/+/, "")}`;
+  return new URL(trimmed, `${baseUrl}/`).toString();
+};
+
 const fetchBlogs = async (searchParams) => {
   const baseUrl = await getBaseUrl();
   const queryString = new URLSearchParams(searchParams).toString();
@@ -21,17 +29,13 @@ const fetchBlogs = async (searchParams) => {
   const res = await fetch(`${baseUrl}/api/blog${separator}${queryString}`, {
     next: { revalidate: 60 },
   });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch blogs");
-  }
-
+  if (!res.ok) throw new Error("Failed to fetch blogs");
   return res.json();
 };
 
 export const metadata = {
-  title: "Blog",
-  description: "Latest posts across every site using this shared template.",
+  title: "Blog | NIGAPE",
+  description: "AI insights, career playbooks, and tech updates from the NIGAPE team.",
 };
 
 export default async function BlogPage({ searchParams }) {
@@ -40,6 +44,7 @@ export default async function BlogPage({ searchParams }) {
   const page = Number(resolvedParams.page) || 1;
   const searchQuery = resolvedParams.search || "";
   const currentTag = resolvedParams.tag || "";
+  const baseUrl = await getBaseUrl();
 
   let data;
   try {
@@ -53,158 +58,228 @@ export default async function BlogPage({ searchParams }) {
   const hasFilters = Boolean(searchQuery || currentTag);
   const featured = !hasFilters && page === 1 && blogs.length ? blogs[0] : null;
   const gridBlogs = featured ? blogs.slice(1) : blogs;
-  const discoveredTags = Array.from(new Set(blogs.flatMap((blog) => blog.tags || []))).slice(0, 8);
-  const featuredCover = featured?.coverImg?.trim() || "/placeholder.svg";
+  const discoveredTags = Array.from(new Set(blogs.flatMap((b) => b.tags || []))).slice(0, 10);
+  const featuredCover = resolveCoverSrc(featured?.coverImg, baseUrl);
   const featuredExternal = Boolean(featuredCover && /^(https?:)?\/\//i.test(featuredCover));
 
   return (
-    <main id="main-content" className="blog-index" role="main">
-      <header className="blog-index__hero">
-        <div className="blog-index__hero-copy">
-          <p className="eyebrow">Stories & Updates</p>
-          <h1>Insights for Builders and Learners</h1>
-          <p>
-            Explore practical playbooks, AI trends, and industry updates from our team.
-            Use search and tags to quickly find what matters to you.
-          </p>
-          <div className="blog-index__hero-meta">
-            <span>{data?.pagination?.total || 0} articles</span>
-            <span>Updated weekly</span>
-          </div>
-        </div>
-        <div className="blog-index__hero-actions">
-          <Link href="/admin/blog/create" className="btn btn--ghost">
-            + New Post
-          </Link>
-          <Link href="/contact-us" className="btn btn--primary">
-            Work With Us
-          </Link>
-        </div>
-      </header>
+    <main className="min-h-screen bg-black text-white font-sans pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
 
-      <section className="blog-toolbar" aria-label="Blog controls">
-        <form className="blog-search" action="/blog" method="GET" role="search" aria-label="Blog search">
-          <input type="hidden" name="tag" value={currentTag} />
-          <input
-            type="search"
-            name="search"
-            placeholder="Search by title, content, or tags"
-            defaultValue={searchQuery}
-            aria-label="Search blog posts"
-          />
-          <button type="submit">Search</button>
-        </form>
+        {/* ── Hero ── */}
+        <div className="relative rounded-3xl overflow-hidden border border-[#9234eb]/30 bg-gradient-to-br from-[#0d0d1a] to-[#120820] p-8 sm:p-12 mb-10 shadow-2xl">
+          {/* glow blobs */}
+          <div className="pointer-events-none absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[#9234eb]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-[#FF40EB]/15 blur-3xl" />
 
-        {hasFilters ? (
-          <Link href="/blog" className="blog-clear-filters">
-            Clear filters
-          </Link>
-        ) : null}
-      </section>
-
-      {discoveredTags.length ? (
-        <section className="blog-topics" aria-label="Popular topics">
-          {discoveredTags.map((tag) => {
-            const tagParams = new URLSearchParams();
-            tagParams.set("tag", tag);
-            if (searchQuery) {
-              tagParams.set("search", searchQuery);
-            }
-
-            return (
-              <Link
-                key={tag}
-                href={`/blog?${tagParams.toString()}`}
-                className={tag === currentTag ? "is-active" : ""}
-              >
-                #{tag}
-              </Link>
-            );
-          })}
-        </section>
-      ) : null}
-
-      {featured ? (
-        <article className="blog-featured">
-          <Link href={`/blog/${featured.slug}`} className="blog-featured__media" aria-label={`Read ${featured.title}`}>
-            <Image
-              src={featuredCover}
-              alt={featured.title}
-              fill
-              sizes="(max-width: 900px) 100vw, 50vw"
-              style={{ objectFit: "cover" }}
-              unoptimized={featuredExternal}
-              priority
-            />
-          </Link>
-
-          <div className="blog-featured__copy">
-            <p className="eyebrow">Featured article</p>
-            <h2>
-              <Link href={`/blog/${featured.slug}`}>{featured.title}</Link>
-            </h2>
-            <p>{toExcerpt(featured.content, 240)}</p>
-            <div className="blog-featured__meta">
-              <span>{formatDate(featured.createdAt)}</span>
-              <span>{featured.tags?.slice(0, 3).join(" • ") || "General"}</span>
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <p className="text-[#FF40EB] font-semibold text-sm uppercase tracking-widest mb-2">Stories & Updates</p>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3">
+                Insights for{" "}
+                <span className="bg-gradient-to-r from-[#9234eb] to-[#FF40EB] bg-clip-text text-transparent">
+                  Builders & Learners
+                </span>
+              </h1>
+              <p className="text-white/60 max-w-xl leading-relaxed">
+                AI trends, career playbooks, and real-world guides from the NIGAPE team.
+              </p>
+              <p className="text-white/40 text-sm mt-3">{data?.pagination?.total || 0} articles · Updated weekly</p>
             </div>
-            <Link href={`/blog/${featured.slug}`} className="btn btn--primary">
-              Read featured post
-            </Link>
           </div>
-        </article>
-      ) : null}
-
-      {gridBlogs.length ? (
-        <div className="blog-grid">
-          {gridBlogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
-          ))}
         </div>
-      ) : (
-        <p className="empty">No posts found for this filter. Try a different keyword or topic.</p>
-      )}
 
-      {data?.pagination?.totalPages > 1 && (
-        <nav className="pagination" aria-label="Blog pagination">
-          {data.pagination.page > 1 ? (
-            <Link
-              href={`/blog?${(() => {
-                const prevParams = new URLSearchParams(resolvedParams);
-                prevParams.set("page", String(data.pagination.page - 1));
-                return prevParams.toString();
-              })()}`}
+        {/* ── Search + Filters ── */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <form
+            className="flex flex-1 items-center gap-2 bg-white/5 border border-white/10 rounded-2xl px-4 py-2 focus-within:border-[#9234eb]/60 transition-colors"
+            action="/blog"
+            method="GET"
+            role="search"
+          >
+            <input type="hidden" name="tag" value={currentTag} />
+            <svg className="w-4 h-4 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+            </svg>
+            <input
+              type="search"
+              name="search"
+              placeholder="Search articles…"
+              defaultValue={searchQuery}
+              className="flex-1 bg-transparent outline-none text-sm text-white placeholder-white/30"
+            />
+            <button
+              type="submit"
+              className="text-xs font-semibold px-3 py-1 rounded-xl bg-[#9234eb] hover:bg-[#7b2cbf] transition-colors text-white"
             >
-              Prev
+              Search
+            </button>
+          </form>
+
+          {hasFilters && (
+            <Link
+              href="/blog"
+              className="flex items-center gap-1 px-4 py-2 rounded-2xl border border-white/10 bg-white/5 text-white/60 hover:text-white hover:border-white/20 text-sm transition-colors"
+            >
+              ✕ Clear filters
             </Link>
-          ) : null}
+          )}
+        </div>
 
-          {Array.from({ length: data.pagination.totalPages }).map((_, index) => {
-            const pageNumber = index + 1;
-            const isActive = pageNumber === data.pagination.page;
-            const paramsClone = new URLSearchParams(resolvedParams);
-            paramsClone.set("page", pageNumber.toString());
+        {/* ── Tag chips ── */}
+        {discoveredTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-10">
+            {discoveredTags.map((tag) => {
+              const tp = new URLSearchParams();
+              tp.set("tag", tag);
+              if (searchQuery) tp.set("search", searchQuery);
+              const isActive = tag === currentTag;
+              return (
+                <Link
+                  key={tag}
+                  href={`/blog?${tp.toString()}`}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#9234eb] border-[#9234eb] text-white shadow-lg shadow-[#9234eb]/30"
+                      : "border-[#9234eb]/30 text-white/60 hover:border-[#9234eb]/70 hover:text-white bg-white/5"
+                  }`}
+                >
+                  #{tag}
+                </Link>
+              );
+            })}
+          </div>
+        )}
 
-            return (
-              <Link key={pageNumber} href={`/blog?${paramsClone.toString()}`} aria-current={isActive ? "page" : undefined}>
-                {pageNumber}
+        {/* ── Featured Post ── */}
+        {featured && (
+          <article className="group rounded-3xl overflow-hidden border border-[#9234eb]/30 bg-gradient-to-br from-[#0d0d1a] to-[#120820] mb-10 shadow-2xl hover:border-[#9234eb]/60 transition-all duration-300 flex flex-col md:flex-row">
+            {/* ── Left: Image ── */}
+            <Link
+              href={`/blog/${featured.slug}`}
+              className="relative w-full md:w-1/2 shrink-0 overflow-hidden"
+              style={{ minHeight: "280px" }}
+              aria-label={`Cover image for ${featured.title}`}
+              tabIndex={-1}
+            >
+              {featuredCover ? (
+                <Image
+                  src={featuredCover}
+                  alt={featured.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover", objectPosition: "center top" }}
+                  unoptimized={featuredExternal}
+                  priority
+                  className="group-hover:scale-105 transition-transform duration-700"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-[#9234eb]/30 to-[#FF40EB]/20 flex items-center justify-center">
+                  <span className="text-6xl">✍️</span>
+                </div>
+              )}
+            </Link>
+
+            {/* ── Right: Details ── */}
+            <div className="flex flex-col justify-center p-8 lg:p-10 w-full md:w-1/2">
+              <p className="text-[#FF40EB] text-xs font-bold uppercase tracking-widest mb-3">✦ Featured Article</p>
+              <h2 className="text-2xl lg:text-3xl font-bold text-white leading-snug mb-4">
+                <Link href={`/blog/${featured.slug}`} className="hover:text-[#c084fc] transition-colors">
+                  {featured.title}
+                </Link>
+              </h2>
+              <p className="text-white/60 leading-relaxed text-sm mb-6 line-clamp-4">
+                {toExcerpt(featured.content, 240)}
+              </p>
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <span className="text-white/40 text-xs">{formatDate(featured.createdAt)}</span>
+                {featured.tags?.slice(0, 3).map((t) => (
+                  <span key={t} className="px-2 py-0.5 rounded-full text-xs bg-[#9234eb]/20 border border-[#9234eb]/30 text-[#c084fc]">
+                    #{t}
+                  </span>
+                ))}
+              </div>
+              <Link
+                href={`/blog/${featured.slug}`}
+                className="self-start px-6 py-3 rounded-2xl bg-gradient-to-r from-[#9234eb] to-[#7b2cbf] text-white font-semibold text-sm hover:from-[#8a2edc] hover:to-[#6a1fa8] hover:scale-105 transition-all duration-300 shadow-lg shadow-[#9234eb]/30"
+              >
+                Read article →
               </Link>
-            );
-          })}
+            </div>
+          </article>
+        )}
 
-          {data.pagination.page < data.pagination.totalPages ? (
-            <Link
-              href={`/blog?${(() => {
-                const nextParams = new URLSearchParams(resolvedParams);
-                nextParams.set("page", String(data.pagination.page + 1));
-                return nextParams.toString();
-              })()}`}
-            >
-              Next
-            </Link>
-          ) : null}
-        </nav>
-      )}
+        {/* ── Section heading ── */}
+        {gridBlogs.length > 0 && (
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-lg font-semibold text-white/80">
+              {hasFilters ? "Search results" : "All Articles"}
+            </h2>
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-white/30 text-sm">{gridBlogs.length} posts</span>
+          </div>
+        )}
+
+        {/* ── Grid ── */}
+        {gridBlogs.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+            {gridBlogs.map((blog) => (
+              <BlogCard key={blog.id} blog={blog} baseUrl={baseUrl} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 rounded-3xl border border-dashed border-white/10 text-white/40">
+            <p className="text-4xl mb-3">🔍</p>
+            <p className="font-semibold text-white/60">No posts found</p>
+            <p className="text-sm mt-1">Try a different keyword or{" "}
+              <Link href="/blog" className="text-[#9234eb] hover:underline">clear filters</Link>
+            </p>
+          </div>
+        )}
+
+        {/* ── Pagination ── */}
+        {data?.pagination?.totalPages > 1 && (
+          <nav className="flex justify-center items-center gap-2" aria-label="Blog pagination">
+            {data.pagination.page > 1 && (
+              <Link
+                href={`/blog?${(() => { const p = new URLSearchParams(resolvedParams); p.set("page", String(data.pagination.page - 1)); return p.toString(); })()}`}
+                className="px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white/70 hover:border-[#9234eb]/50 hover:text-white text-sm transition-all"
+              >
+                ← Prev
+              </Link>
+            )}
+            {Array.from({ length: data.pagination.totalPages }).map((_, i) => {
+              const n = i + 1;
+              const isActive = n === data.pagination.page;
+              const p = new URLSearchParams(resolvedParams);
+              p.set("page", n.toString());
+              return (
+                <Link
+                  key={n}
+                  href={`/blog?${p.toString()}`}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-semibold transition-all ${
+                    isActive
+                      ? "bg-[#9234eb] text-white shadow-lg shadow-[#9234eb]/30"
+                      : "border border-white/10 bg-white/5 text-white/60 hover:border-[#9234eb]/40 hover:text-white"
+                  }`}
+                >
+                  {n}
+                </Link>
+              );
+            })}
+            {data.pagination.page < data.pagination.totalPages && (
+              <Link
+                href={`/blog?${(() => { const p = new URLSearchParams(resolvedParams); p.set("page", String(data.pagination.page + 1)); return p.toString(); })()}`}
+                className="px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white/70 hover:border-[#9234eb]/50 hover:text-white text-sm transition-all"
+              >
+                Next →
+              </Link>
+            )}
+          </nav>
+        )}
+      </div>
     </main>
   );
 }
+
