@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getBaseUrl } from "@/lib/base-url";
+import BlogCard from "@/components/BlogCard";
 import "@/styles/blog.css";
 
 const formatDate = (value) =>
@@ -31,13 +32,25 @@ const fetchBlog = async (slug) => {
   return res.json();
 };
 
-const fetchRelated = async (slug) => {
-  const baseUrl = await getBaseUrl();
+const fetchRelated = async (slug, baseUrl) => {
+  // Try tag-based related posts first
   const res = await fetch(`${baseUrl}/api/blog?relatedTo=${slug}&limit=3`, {
     next: { revalidate: 60 },
   });
   if (!res.ok) return { data: [] };
-  return res.json();
+  const result = await res.json();
+
+  // If no tag-matched posts, fall back to latest posts (excluding current)
+  if (!result.data?.length) {
+    const fallback = await fetch(
+      `${baseUrl}/api/blog?excludeSlug=${slug}&limit=3`,
+      { next: { revalidate: 60 } }
+    );
+    if (!fallback.ok) return { data: [] };
+    return fallback.json();
+  }
+
+  return result;
 };
 
 export async function generateMetadata(props) {
@@ -84,13 +97,13 @@ export default async function BlogDetails(props) {
     notFound();
   }
 
-  const related = await fetchRelated(slug);
+  const baseUrl = await getBaseUrl();
+  const related = await fetchRelated(slug, baseUrl);
   const cover = blog.coverImg?.trim();
   const isExternalCover = Boolean(cover && /^(https?:)?\/\//i.test(cover));
   const hasCover = Boolean(cover);
   const imageSrc = hasCover ? cover : "/placeholder.svg";
   const isPlaceholder = !hasCover;
-  const baseUrl = await getBaseUrl();
   const canonical = `${baseUrl}/blog/${blog.slug}`;
   const readingMinutes = calculateReadingMinutes(blog.content);
   const publishedDate = formatDate(blog.createdAt);
@@ -178,23 +191,21 @@ export default async function BlogDetails(props) {
             </Link>
           </div>
         </section>
-
-        {related?.data?.length ? (
-          <aside className="related">
-            <h3>Related Posts</h3>
-            <ul>
-              {related.data.map((item) => (
-                <li key={item.id}>
-                  <Link href={`/blog/${item.slug}`}>
-                    <span>{item.title}</span>
-                    <small>{formatDate(item.createdAt)}</small>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        ) : null}
       </article>
+
+      {related?.data?.length ? (
+        <aside className="related-cards" aria-label="Recommended posts">
+          <div className="related-cards__header">
+            <h3>Recommended Reading</h3>
+            <Link href="/blog" className="related-cards__all">All articles →</Link>
+          </div>
+          <div className="related-cards__grid">
+            {related.data.map((item) => (
+              <BlogCard key={item.id} blog={item} baseUrl={baseUrl} />
+            ))}
+          </div>
+        </aside>
+      ) : null}
     </main>
   );
 }

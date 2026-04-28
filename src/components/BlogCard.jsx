@@ -32,8 +32,8 @@ const BlogCard = ({ blog, baseUrl }) => {
       {/* Cover image */}
       <Link
         href={`/blog/${blog.slug}`}
-        className="relative block overflow-hidden"
-        style={{ minHeight: "190px" }}
+        className="block overflow-hidden"
+        style={{ position: "relative", paddingTop: "56.25%" }}
         aria-label={`Read ${blog.title}`}
       >
         {hasCover ? (

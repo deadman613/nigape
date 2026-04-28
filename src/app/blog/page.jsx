@@ -1,26 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import BlogCard from "@/components/BlogCard";
 import { getBaseUrl } from "@/lib/base-url";
 import "@/styles/blog.css";
-
-const formatDate = (value) =>
-  new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(value));
-
-const toExcerpt = (html, maxLength = 210) => {
-  if (!html) return "";
-  const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-  if (!text) return "";
-  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
-};
-
-const resolveCoverSrc = (coverImg, baseUrl) => {
-  const trimmed = coverImg?.trim();
-  if (!trimmed) return null;
-  if (/^(https?:)?\/\//i.test(trimmed) || trimmed.startsWith("/")) return trimmed;
-  if (!baseUrl) return `/${trimmed.replace(/^\/+/, "")}`;
-  return new URL(trimmed, `${baseUrl}/`).toString();
-};
 
 const fetchBlogs = async (searchParams) => {
   const baseUrl = await getBaseUrl();
@@ -56,11 +37,8 @@ export default async function BlogPage({ searchParams }) {
 
   const blogs = data?.data || [];
   const hasFilters = Boolean(searchQuery || currentTag);
-  const featured = !hasFilters && page === 1 && blogs.length ? blogs[0] : null;
-  const gridBlogs = featured ? blogs.slice(1) : blogs;
+  const gridBlogs = blogs;
   const discoveredTags = Array.from(new Set(blogs.flatMap((b) => b.tags || []))).slice(0, 10);
-  const featuredCover = resolveCoverSrc(featured?.coverImg, baseUrl);
-  const featuredExternal = Boolean(featuredCover && /^(https?:)?\/\//i.test(featuredCover));
 
   return (
     <main className="min-h-screen bg-black text-white font-sans pt-24 pb-20 px-4 sm:px-6 lg:px-8">
@@ -149,64 +127,6 @@ export default async function BlogPage({ searchParams }) {
               );
             })}
           </div>
-        )}
-
-        {/* ── Featured Post ── */}
-        {featured && (
-          <article className="group rounded-3xl overflow-hidden border border-[#9234eb]/30 bg-gradient-to-br from-[#0d0d1a] to-[#120820] mb-10 shadow-2xl hover:border-[#9234eb]/60 transition-all duration-300 flex flex-col md:flex-row">
-            {/* ── Left: Image ── */}
-            <Link
-              href={`/blog/${featured.slug}`}
-              className="relative w-full md:w-1/2 shrink-0 overflow-hidden"
-              style={{ minHeight: "280px" }}
-              aria-label={`Cover image for ${featured.title}`}
-              tabIndex={-1}
-            >
-              {featuredCover ? (
-                <Image
-                  src={featuredCover}
-                  alt={featured.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  style={{ objectFit: "cover", objectPosition: "center top" }}
-                  unoptimized={featuredExternal}
-                  priority
-                  className="group-hover:scale-105 transition-transform duration-700"
-                />
-              ) : (
-                <div className="absolute inset-0 bg-gradient-to-br from-[#9234eb]/30 to-[#FF40EB]/20 flex items-center justify-center">
-                  <span className="text-6xl">✍️</span>
-                </div>
-              )}
-            </Link>
-
-            {/* ── Right: Details ── */}
-            <div className="flex flex-col justify-center p-8 lg:p-10 w-full md:w-1/2">
-              <p className="text-[#FF40EB] text-xs font-bold uppercase tracking-widest mb-3">✦ Featured Article</p>
-              <h2 className="text-2xl lg:text-3xl font-bold text-white leading-snug mb-4">
-                <Link href={`/blog/${featured.slug}`} className="hover:text-[#c084fc] transition-colors">
-                  {featured.title}
-                </Link>
-              </h2>
-              <p className="text-white/60 leading-relaxed text-sm mb-6 line-clamp-4">
-                {toExcerpt(featured.content, 240)}
-              </p>
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                <span className="text-white/40 text-xs">{formatDate(featured.createdAt)}</span>
-                {featured.tags?.slice(0, 3).map((t) => (
-                  <span key={t} className="px-2 py-0.5 rounded-full text-xs bg-[#9234eb]/20 border border-[#9234eb]/30 text-[#c084fc]">
-                    #{t}
-                  </span>
-                ))}
-              </div>
-              <Link
-                href={`/blog/${featured.slug}`}
-                className="self-start px-6 py-3 rounded-2xl bg-gradient-to-r from-[#9234eb] to-[#7b2cbf] text-white font-semibold text-sm hover:from-[#8a2edc] hover:to-[#6a1fa8] hover:scale-105 transition-all duration-300 shadow-lg shadow-[#9234eb]/30"
-              >
-                Read article →
-              </Link>
-            </div>
-          </article>
         )}
 
         {/* ── Section heading ── */}

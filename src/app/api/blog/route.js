@@ -19,6 +19,7 @@ export async function GET(request) {
     const tag = searchParams.get("tag")?.trim();
     const relatedTo = searchParams.get("relatedTo")?.trim();
     const excludeId = searchParams.get("excludeId")?.trim();
+    const excludeSlug = searchParams.get("excludeSlug")?.trim();
 
     const filters = [];
     const excludedIds = [];
@@ -39,6 +40,14 @@ export async function GET(request) {
 
     if (excludeId) {
       excludedIds.push(excludeId);
+    }
+
+    if (excludeSlug) {
+      const ref = await prisma.blog.findUnique({
+        where: { slug: excludeSlug },
+        select: { id: true },
+      });
+      if (ref) excludedIds.push(ref.id);
     }
 
     if (relatedTo) {
