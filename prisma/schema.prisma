@@ -25,6 +25,7 @@ model Blog {
   author          String?
   metaTitle       String?
   metaDescription String?
+  published       Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

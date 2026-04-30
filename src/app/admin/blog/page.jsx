@@ -21,8 +21,8 @@ export default async function AdminBlogPage() {
   }
 
   const totalPosts = blogs.length;
-  const publishedCount = blogs.length;
-  const draftsCount = 0;
+  const publishedCount = blogs.filter((b) => b.published).length;
+  const draftsCount = blogs.filter((b) => !b.published).length;
   const archivedCount = 0;
   const recentPosts = blogs.slice(0, 8);
   const stats = [
@@ -92,7 +92,9 @@ export default async function AdminBlogPage() {
                       <p className="admin-table__meta">/blog/{blog.slug}</p>
                     </td>
                     <td>
-                      <span className="admin-status-pill">Published</span>
+                      <span className={`admin-status-pill${blog.published ? "" : " admin-status-pill--draft"}`}>
+                        {blog.published ? "Published" : "Draft"}
+                      </span>
                     </td>
                     <td>{formatDate(blog.createdAt)}</td>
                     <td>

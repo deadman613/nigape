@@ -347,6 +347,12 @@
   border: 1px solid rgba(37, 195, 108, 0.35);
 }
 
+.admin-status-pill--draft {
+  color: #f4c06a;
+  background: rgba(244, 192, 106, 0.12);
+  border: 1px solid rgba(244, 192, 106, 0.35);
+}
+
 .admin-form {
   gap: 1.15rem;
 }

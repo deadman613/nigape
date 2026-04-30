@@ -15,6 +15,7 @@ const baseState = {
   author: "",
   metaTitle: "",
   metaDescription: "",
+  published: true,
 };
 
 const clientSlugify = (raw = "") =>
@@ -54,12 +55,13 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
   const [formValues, setFormValues] = useState(() => ({
     ...baseState,
     ...initialData,
-    tags: initialData?.tags?.join(", ") || initialData?.tags || "",
+    tags: Array.isArray(initialData?.tags) ? initialData.tags.join(", ") : (initialData?.tags || ""),
     content: initialData?.content || "",
     excerpt: initialData?.excerpt || "",
     author: initialData?.author || "",
     metaTitle: initialData?.metaTitle || "",
     metaDescription: initialData?.metaDescription || "",
+    published: initialData?.published !== false,
   }));
   const [slugTouched, setSlugTouched] = useState(Boolean(initialData?.slug));
   const [activeTab, setActiveTab] = useState("content");
@@ -176,6 +178,7 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
         author: formValues.author?.trim() || "",
         metaTitle: formValues.metaTitle?.trim() || "",
         metaDescription: formValues.metaDescription?.trim() || "",
+        published: formValues.published,
       };
 
       const isEdit = mode === "edit" && initialData?.id;
@@ -348,8 +351,16 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
 
             <label className="field">
               <span>Status</span>
-              <input type="text" value="Published" readOnly aria-describedby={statusHelpId} />
-              <small id={statusHelpId}>Posts are published immediately after saving.</small>
+              <select
+                name="published"
+                value={formValues.published ? "published" : "draft"}
+                onChange={(event) => setField("published", event.target.value === "published")}
+                aria-describedby={statusHelpId}
+              >
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+              </select>
+              <small id={statusHelpId}>Published posts are visible publicly. Drafts are only visible in the admin panel.</small>
             </label>
 
             <label className="field">
