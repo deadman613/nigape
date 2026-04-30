@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
+  verification: {
+    google: "p-LDTwKh1RWq4EXjYEnEhRI9bhHhSzmRpcFIbBtABHg",
+  },
   title: "NIGAPE - GK2 Delhi Institute of Generative AI & Prompt Engineering",
   description: "India-first institute dedicated to Generative AI and Prompt Engineering careers.",
   openGraph: {
