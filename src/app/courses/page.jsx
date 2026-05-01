@@ -102,14 +102,14 @@ const Marquee = () => {
 // ─── Course Card ──────────────────────────────────────────────────────────────
 const CourseCard = ({ course }) => {
   const courseGraphicMap = {
-    "Diploma in Generative AI & Prompt Engineering": "Generative AI & Prompt Engineering (Diploma — 12 Months).webp",
-    "Advanced Generative AI & Prompt Engineering": "Advanced Certification in Generative AI & Prompt Engineering (6 Months).webp",
-    "Advanced Certification in Generative AI & Prompt Engineering": "Advanced Certification in Generative AI & Prompt Engineering (6 Months).webp",
-    "AI Literacy for Everyone": "AI Literacy Course (1.5 Months).webp",
-    "Generative AI for Professionals": "Generative AI for Professionals (4 Months).webp",
-    "NLP Professional": "Natural Language Processing Professional (4 Months).webp",
-    "Computer Vision Professional": "Computer Vision Professional (4 Months).webp",
-    "Deep Learning Professional": "Deep Learning Professional (4 Months).webp",
+    "Diploma in Generative AI & Prompt Engineering": "21.webp",
+    "Advanced Generative AI & Prompt Engineering": "13.webp",
+    "Advanced Certification in Generative AI & Prompt Engineering": "14.webp",
+    "AI Literacy for Everyone": "19.webp",
+    "Generative AI for Professionals": "16.webp",
+    "NLP Professional": "15.webp",
+    "Computer Vision Professional": "20.webp",
+    "Deep Learning Professional": "17.webp",
   };
   const courseGraphic = courseGraphicMap[course.title];
   const imageSrc = courseGraphic

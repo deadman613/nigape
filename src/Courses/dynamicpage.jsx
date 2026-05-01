@@ -47,14 +47,14 @@ const CoursePage = ({ course }) => {
 
   // Map course title to image filename in public/coursegraphic/
   const courseGraphicMap = {
-    "Diploma in Generative AI & Prompt Engineering": "/coursegraphic/Generative AI & Prompt Engineering (Diploma — 12 Months).webp",
-    "Advanced Generative AI & Prompt Engineering": "/coursegraphic/Advanced Certification in Generative AI & Prompt Engineering (6 Months).webp",
-    "Advanced Certification in Generative AI & Prompt Engineering": "/coursegraphic/Advanced Certification in Generative AI & Prompt Engineering (6 Months).webp",
-    "AI Literacy for Everyone": "/coursegraphic/AI Literacy Course (1.5 Months).webp",
-    "Generative AI for Professionals": "/coursegraphic/Generative AI for Professionals (4 Months).webp",
-    "NLP Professional": "/coursegraphic/Natural Language Processing Professional (4 Months).webp",
-    "Computer Vision Professional": "/coursegraphic/Computer Vision Professional (4 Months).webp",
-    "Deep Learning Professional": "/coursegraphic/Deep Learning Professional (4 Months).webp"
+    "Diploma in Generative AI & Prompt Engineering": "/coursegraphic/21.webp",
+    "Advanced Generative AI & Prompt Engineering": "/coursegraphic/13.webp",
+    "Advanced Certification in Generative AI & Prompt Engineering": "/coursegraphic/14.webp",
+    "AI Literacy for Everyone": "/coursegraphic/19.webp",
+    "Generative AI for Professionals": "/coursegraphic/16.webp",
+    "NLP Professional": "/coursegraphic/15.webp",
+    "Computer Vision Professional": "/coursegraphic/20.webp",
+    "Deep Learning Professional": "/coursegraphic/17.webp"
   };
   const courseGraphic = courseGraphicMap[course.title];
   const imageSrc = courseGraphic || course.image || "https://via.placeholder.com/600x300?text=Course+Image";
@@ -82,7 +82,7 @@ const CoursePage = ({ course }) => {
                     className="w-full h-auto object-contain min-h-[180px] max-h-[320px] sm:min-h-[220px] sm:max-h-[400px] md:min-h-[260px] md:max-h-[500px] lg:min-h-[320px] lg:max-h-[600px]"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                  {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div> */}
                 </div>
                 <div className="mt-[-12px] sm:mt-0 space-y-2">
                   <span className="inline-block px-3 py-1 bg-[#FF40EB]/20 text-[#FF40EB] rounded-full text-sm">
