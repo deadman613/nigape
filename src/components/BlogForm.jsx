@@ -66,7 +66,7 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
   const [slugTouched, setSlugTouched] = useState(Boolean(initialData?.slug));
   const [activeTab, setActiveTab] = useState("content");
   const [schemaCopied, setSchemaCopied] = useState(false);
-  const [schemaOverride, setSchemaOverride] = useState(null);
+  const [schemaOverride, setSchemaOverride] = useState(() => initialData?.schemaJsonLd || null);
   const [status, setStatus] = useState({ type: null, message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -178,6 +178,7 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
         author: formValues.author?.trim() || "",
         metaTitle: formValues.metaTitle?.trim() || "",
         metaDescription: formValues.metaDescription?.trim() || "",
+        schemaJsonLd: schemaOverride?.trim() || "",
         published: formValues.published,
       };
 

@@ -15,6 +15,17 @@ const calculateReadingMinutes = (html) => {
   return Math.max(1, Math.ceil(words / 220));
 };
 
+const parseJsonLd = (value) => {
+  if (!value || typeof value !== "string") {
+    return null;
+  }
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+};
+
 const fetchBlog = async (slug) => {
   const baseUrl = await getBaseUrl();
   const res = await fetch(`${baseUrl}/api/blog/${slug}`, {
@@ -108,7 +119,7 @@ export default async function BlogDetails(props) {
   const readingMinutes = calculateReadingMinutes(blog.content);
   const publishedDate = formatDate(blog.createdAt);
   const updatedDate = formatDate(blog.updatedAt ?? blog.createdAt);
-  const jsonLd = {
+  const generatedJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: blog.title,
@@ -130,6 +141,8 @@ export default async function BlogDetails(props) {
       : undefined,
     description: blog.content.replace(/<[^>]+>/g, " ").slice(0, 160),
   };
+  const customJsonLd = parseJsonLd(blog.schemaJsonLd);
+  const jsonLd = customJsonLd || generatedJsonLd;
 
   return (
     <main id="main-content" className="blog-detail" role="main">
