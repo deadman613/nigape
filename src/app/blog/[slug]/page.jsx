@@ -115,41 +115,19 @@ export default async function BlogDetails(props) {
   const hasCover = Boolean(cover);
   const imageSrc = hasCover ? cover : "/placeholder.svg";
   const isPlaceholder = !hasCover;
-  const canonical = `${baseUrl}/blog/${blog.slug}`;
   const readingMinutes = calculateReadingMinutes(blog.content);
   const publishedDate = formatDate(blog.createdAt);
   const updatedDate = formatDate(blog.updatedAt ?? blog.createdAt);
-  const generatedJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: blog.title,
-    url: canonical,
-    datePublished: blog.createdAt,
-    dateModified: blog.updatedAt ?? blog.createdAt,
-    author: {
-      "@type": "Person",
-      name: "Editorial Team",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Blogcode",
-    },
-    image: hasCover
-      ? isExternalCover
-        ? imageSrc
-        : new URL(imageSrc, baseUrl).toString()
-      : undefined,
-    description: blog.content.replace(/<[^>]+>/g, " ").slice(0, 160),
-  };
   const customJsonLd = parseJsonLd(blog.schemaJsonLd);
-  const jsonLd = customJsonLd || generatedJsonLd;
 
   return (
     <main id="main-content" className="blog-detail" role="main">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {customJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(customJsonLd) }}
+        />
+      ) : null}
       <article aria-labelledby="blog-title">
         <header className="blog-detail__header">
           <nav className="blog-breadcrumb" aria-label="Breadcrumb">

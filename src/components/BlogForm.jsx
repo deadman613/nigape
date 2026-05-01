@@ -66,7 +66,7 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
   const [slugTouched, setSlugTouched] = useState(Boolean(initialData?.slug));
   const [activeTab, setActiveTab] = useState("content");
   const [schemaCopied, setSchemaCopied] = useState(false);
-  const [schemaOverride, setSchemaOverride] = useState(() => initialData?.schemaJsonLd || null);
+  const [schemaOverride, setSchemaOverride] = useState(() => initialData?.schemaJsonLd || "");
   const [status, setStatus] = useState({ type: null, message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -89,28 +89,6 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
     { label: "Cover image set", ok: Boolean(formValues.coverImg.trim()) },
     { label: "Meta description set", ok: Boolean(formValues.metaDescription.trim()) },
   ];
-
-  const generatedJsonLd = useMemo(() => {
-    const obj = {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: formValues.metaTitle.trim() || formValues.title.trim() || "Post Title",
-      description: formValues.metaDescription.trim() || formValues.excerpt.trim() || "",
-      image: formValues.coverImg.trim() || undefined,
-      author: {
-        "@type": "Person",
-        name: formValues.author.trim() || "Admin",
-      },
-      datePublished: initialData?.createdAt || new Date().toISOString(),
-      dateModified: initialData?.updatedAt || new Date().toISOString(),
-      url: `${typeof window !== "undefined" ? window.location.origin : ""}/blog/${normalizedSlug}`,
-      keywords: formValues.tags,
-    };
-    Object.keys(obj).forEach((k) => obj[k] === undefined && delete obj[k]);
-    return JSON.stringify(obj, null, 2);
-  }, [formValues.metaTitle, formValues.title, formValues.metaDescription, formValues.excerpt, formValues.coverImg, formValues.author, formValues.tags, normalizedSlug, initialData]);
-
-  const jsonLd = schemaOverride !== null ? schemaOverride : generatedJsonLd;
 
   useEffect(() => {
     if (!slugTouched && formValues.title) {
@@ -470,12 +448,12 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
           <section className="admin-card">
             <h3>JSON-LD Structured Data</h3>
             <p style={{ marginBottom: "1rem", color: "var(--text-muted, #888)" }}>
-              Auto-generated from your post data. You can edit it manually or re-generate to reset to the auto-generated version.
+              Add your custom JSON-LD here. Only this value will be saved and used on the blog page.
             </p>
             <div style={{ position: "relative" }}>
               <textarea
                 rows={20}
-                value={jsonLd}
+                value={schemaOverride}
                 onChange={(e) => setSchemaOverride(e.target.value)}
                 spellCheck={false}
                 style={{ width: "100%", fontFamily: "monospace", fontSize: "0.82rem", background: "#1e1e1e", color: "#d4d4d4", borderRadius: "8px", padding: "1rem", resize: "vertical", border: "none", outline: "none" }}
@@ -486,18 +464,18 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
                   className="btn btn--ghost"
                   style={{ fontSize: "0.78rem", padding: "0.25rem 0.75rem" }}
                   onClick={() => {
-                    setSchemaOverride(null);
+                    setSchemaOverride("");
                   }}
-                  title="Reset to auto-generated schema"
+                  title="Clear schema"
                 >
-                  Re-generate
+                  Clear
                 </button>
                 <button
                   type="button"
                   className="btn btn--ghost"
                   style={{ fontSize: "0.78rem", padding: "0.25rem 0.75rem" }}
                   onClick={() => {
-                    navigator.clipboard.writeText(jsonLd).then(() => {
+                    navigator.clipboard.writeText(schemaOverride).then(() => {
                       setSchemaCopied(true);
                       setTimeout(() => setSchemaCopied(false), 2000);
                     });
@@ -508,7 +486,7 @@ const BlogForm = ({ initialData = null, mode = "create" }) => {
               </div>
             </div>
             <small style={{ marginTop: "0.5rem", display: "block" }}>
-              {schemaOverride !== null ? "\u270F\uFE0F Manually edited — click Re-generate to restore auto values." : "\u2728 Auto-generated from post fields."}
+              {schemaOverride.trim() ? "Custom schema is ready to save." : "No schema added yet."}
             </small>
           </section>
         </section>
