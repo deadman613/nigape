@@ -145,7 +145,7 @@ export default function AboutUsSection() {
             Ready to Transform Your Career?
           </h3> */}
           <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-            Start your GenAI and Prompt Engineering journey with India&apos;s dedicated institute
+            Start your Gen AI and Prompt Engineering journey with India&apos;s dedicated institute
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="?enroll=1" className="bg-[#FF40EB] text-white font-semibold px-10 py-4 rounded-full transition-all duration-300 text-center">
