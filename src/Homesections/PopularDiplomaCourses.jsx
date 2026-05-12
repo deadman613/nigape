@@ -21,10 +21,10 @@ function getPopularDiplomaCourses(limit = 3) {
 
 function getCourseImage(course) {
   const courseGraphicMap = {
-    "Diploma in Generative AI & Prompt Engineering": "/coursegraphic/Generative AI & Prompt Engineering (Diploma — 12 Months).webp",
+    "Diploma in Generative AI & Prompt Engineering": "/coursegraphic/21.webp",
     "Advanced Generative AI & Prompt Engineering": "/coursegraphic/Advanced Certification in Generative AI & Prompt Engineering (6 Months).webp",
-    "AI Literacy for Everyone": "/coursegraphic/AI Literacy Course (1.5 Months).webp",
-    "Generative AI for Professionals": "/coursegraphic/Generative AI for Professionals (4 Months).webp",
+    "AI Literacy for Everyone": "/coursegraphic/19.webp",
+    "Generative AI for Professionals": "/coursegraphic/16.webp",
     "NLP Professional": "/coursegraphic/Natural Language Processing Professional (4 Months).webp",
     "Computer Vision Professional": "/coursegraphic/Computer Vision Professional (4 Months).webp",
     "Deep Learning Professional": "/coursegraphic/Deep Learning Professional (4 Months).webp",
