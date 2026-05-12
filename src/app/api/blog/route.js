@@ -6,8 +6,8 @@ import { ensureAdminApi } from "@/lib/auth";
 import { recordAudit } from "@/lib/audit";
 import { getClientIp } from "@/lib/request-info";
 
-const DEFAULT_LIMIT = 9;
-const MAX_LIMIT = 24;
+const DEFAULT_LIMIT = 18;
+const MAX_LIMIT = 50;
 
 export async function GET(request) {
   try {
