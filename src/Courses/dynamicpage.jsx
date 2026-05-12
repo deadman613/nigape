@@ -2,10 +2,23 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronDown } from 'lucide-react';
+import Homsection7 from '@/Homesections/Homesection7';
+import {
+  BadgeCheck,
+  BookOpenText,
+  BriefcaseBusiness,
+  ChevronDown,
+  FolderKanban,
+  MonitorSmartphone,
+  UsersRound,
+} from 'lucide-react';
 import { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
 import Accordion from './Accordion';
 import { courses as allCourses } from '@/Data/data';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 function CourseFAQ() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -58,6 +71,80 @@ const CoursePage = ({ course }) => {
   };
   const courseGraphic = courseGraphicMap[course.title];
   const imageSrc = courseGraphic || course.image || "https://via.placeholder.com/600x300?text=Course+Image";
+  const testimonials = [
+    {
+      quote: "I joined NIGAPE's Generative AI and Prompt Engineering diploma after Class 12. Within 3 months I built my first AI support bot, portfolio website, and prompt library. The mentors made AI learning practical from day one.",
+      name: 'Rohit Sharma',
+      role: 'Class 12 Graduate',
+      img: 'https://i.pravatar.cc/80?img=1',
+      program: 'GenAI Diploma',
+      outcome: 'Built AI bot + portfolio in the first quarter',
+    },
+    {
+      quote: "As a working professional in marketing, I used NIGAPE to transition into AI automation consulting. The live Prompt Engineering classes, weekend support, and project reviews helped me switch roles with confidence.",
+      name: 'Priya Verma',
+      role: 'Working Professional',
+      img: 'https://i.pravatar.cc/80?img=2',
+      program: 'AI for Professionals',
+      outcome: 'Moved from marketing to AI automation consulting',
+    },
+    {
+      quote: "The best part of NIGAPE was the project-first structure. I completed six real Generative AI projects, practiced interviews, and learned how to present prompt engineering work clearly to hiring teams.",
+      name: 'Vikram Nair',
+      role: 'Software Engineer',
+      img: 'https://i.pravatar.cc/80?img=6',
+      program: 'Advanced GenAI',
+      outcome: 'Created 6 portfolio-ready AI projects',
+    },
+    {
+      quote: "After completing the Advanced Generative AI program, I got hired as a Prompt Engineer at a Delhi-based SaaS startup. The resume review, mock interviews, and capstone feedback made a direct difference.",
+      name: 'Deepika Reddy',
+      role: 'Prompt Engineer',
+      img: 'https://i.pravatar.cc/80?img=9',
+      program: 'Career Outcome',
+      outcome: 'Landed a Prompt Engineer role after completion',
+    },
+    {
+      quote: "NIGAPE changed how I think about AI. It was not just theory. We worked on RAG pipelines, agent workflows, prompt testing, and business use-cases that I now apply in my product role every week.",
+      name: 'Karan Malhotra',
+      role: 'Product Manager',
+      img: 'https://i.pravatar.cc/80?img=11',
+      program: 'Professional Track',
+      outcome: 'Applied RAG and AI workflow design at work',
+    },
+    {
+      quote: "I had zero coding background, but NIGAPE's AI Literacy and guided labs made LLMs, prompting, and AI tools easy to understand. In under two months I was confidently using AI for presentations and college work.",
+      name: 'Simran Kaur',
+      role: 'BBA Student',
+      img: 'https://i.pravatar.cc/80?img=5',
+      program: 'AI Literacy',
+      outcome: 'Went from non-technical to confident AI user',
+    },
+    {
+      quote: "I was looking for an AI course in Delhi with live mentorship, real projects, and placement help. NIGAPE delivered all three. The feedback cycles and peer reviews pushed me to build better GenAI applications.",
+      name: 'Ankit Mehra',
+      role: 'B.Tech Student',
+      img: 'https://i.pravatar.cc/80?img=3',
+      program: 'Offline + Live Cohort',
+      outcome: 'Improved project quality through mentor feedback',
+    },
+    {
+      quote: "Coming from a non-tech background, I needed a structured Prompt Engineering institute that explained concepts in business language. NIGAPE helped me understand AI strategy, prompt design, and automation thinking clearly.",
+      name: 'Neha Srivastava',
+      role: 'Business Analyst',
+      img: 'https://i.pravatar.cc/80?img=16',
+      program: 'Prompt Engineering',
+      outcome: 'Applied AI strategy in client and internal workflows',
+    },
+    {
+      quote: "The hybrid model worked perfectly for me. I attended online classes, submitted weekly AI assignments, and still got personalised guidance. It felt like a serious career program rather than a recorded course bundle.",
+      name: 'Aisha Khan',
+      role: 'Career Switcher',
+      img: 'https://i.pravatar.cc/80?img=20',
+      program: 'Hybrid Learning',
+      outcome: 'Built consistency with live classes and weekly reviews',
+    },
+  ];
   return (
     <>
       <Head>
@@ -258,18 +345,46 @@ const CoursePage = ({ course }) => {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-white">
               Recommended <span className="text-[#FF40EB]">Courses</span>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 rounded-4xl">
               {allCourses.filter(c => c.id !== course.id).slice(0, 3).map((rec) => {
                 const recImg = courseGraphicMap[rec.title] || rec.image || "https://via.placeholder.com/600x300?text=Course";
+                const highlights = (rec.whatYouWillLearn?.length ? rec.whatYouWillLearn : rec.topics || []).slice(0, 2);
                 return (
-                  <Link key={rec.id} href={`/courses/${rec.slug}`} className="group block bg-black/40 border border-[#FF40EB]/20 rounded-2xl overflow-hidden hover:border-[#FF40EB]/60 transition-all duration-300">
-                    <div className="relative h-30 bg-black">
-                      <img src={recImg} alt={rec.title} className="w-full h-full object-cover" loading="lazy" />
+                  <Link key={rec.id} href={`/courses/${rec.slug}`} className="group block h-full bg-black/40 border border-[#FF40EB]/20 rounded-2xl overflow-hidden hover:border-[#FF40EB]/60 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(255,64,235,0.16)]">
+                    <div className="relative aspect-video bg-black p-2">
+                      <img src={recImg} alt={rec.title} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.02]" loading="lazy" />
                     </div>
-                    <div className="p-4 h-40">
-                      <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">{rec.title}</h3>
-                      <p className="text-gray-400 text-xs mb-3 line-clamp-2">{rec.description}</p>
-                      <span className="text-[#FF40EB] text-xs font-semibold group-hover:underline">View Course →</span>
+                    <div className="flex h-full flex-col p-5 md:p-6">
+                      <div className="flex items-center justify-between gap-3 text-[11px] uppercase tracking-[0.18em]">
+                        <span className="text-[#FF40EB]">{rec.level || "Course"}</span>
+                        <span className="text-gray-400">{rec.duration}</span>
+                      </div>
+                      <h3 className="mt-4 text-white font-bold text-lg leading-snug min-h-[56px] line-clamp-2">{rec.title}</h3>
+                      <p className="mt-3 text-gray-400 text-sm leading-6 line-clamp-4 min-h-[96px]">{rec.fullDescription || rec.description}</p>
+
+                      <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-xs">
+                        <div>
+                          <p className="text-gray-500 uppercase tracking-[0.16em]">Mode</p>
+                          <p className="mt-1 text-white">{rec.mode || "Hybrid"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 uppercase tracking-[0.16em]">Rating</p>
+                          <p className="mt-1 text-white">{rec.rating} / 5</p>
+                        </div>
+                      </div>
+
+                      {highlights.length > 0 && (
+                        <div className="mt-4 space-y-2">
+                          {highlights.map((item) => (
+                            <div key={item} className="flex items-start gap-2 text-sm text-gray-300 leading-5">
+                              <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#FF40EB] shrink-0" aria-hidden="true" />
+                              <span className="line-clamp-2">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <span className="mt-5 text-[#FF40EB] text-sm font-semibold group-hover:underline">View Course →</span>
                     </div>
                   </Link>
                 );
@@ -286,14 +401,41 @@ const CoursePage = ({ course }) => {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { title: "Industry-Aligned Curriculum", desc: "Built with real AI hiring needs in mind — not just theory." },
-                { title: "1-on-1 Mentor Support", desc: "Get personal guidance from experienced AI practitioners." },
-                { title: "Career & Placement Help", desc: "Resume reviews, mock interviews, and job-readiness coaching." },
-                { title: "Project-First Learning", desc: "Build a portfolio of 6+ real AI projects before you graduate." },
-                { title: "Campus + Online Modes", desc: "Attend from our Delhi campus or join live online cohorts." },
-                { title: "Recognised Certificate", desc: "Industry-recognised certification upon completion." },
+                {
+                  title: "Industry-Aligned Curriculum",
+                  desc: "Built with real AI hiring needs in mind — not just theory.",
+                  icon: BookOpenText,
+                },
+                {
+                  title: "1-on-1 Mentor Support",
+                  desc: "Get personal guidance from experienced AI practitioners.",
+                  icon: UsersRound,
+                },
+                {
+                  title: "Career & Placement Help",
+                  desc: "Resume reviews, mock interviews, and job-readiness coaching.",
+                  icon: BriefcaseBusiness,
+                },
+                {
+                  title: "Project-First Learning",
+                  desc: "Build a portfolio of 6+ real AI projects before you graduate.",
+                  icon: FolderKanban,
+                },
+                {
+                  title: "Campus + Online Modes",
+                  desc: "Attend from our Delhi campus or join live online cohorts.",
+                  icon: MonitorSmartphone,
+                },
+                {
+                  title: "Recognised Certificate",
+                  desc: "Industry-recognised certification upon completion.",
+                  icon: BadgeCheck,
+                },
               ].map((item, i) => (
                 <div key={i} className="bg-black/40 border border-[#FF40EB]/20 rounded-2xl p-6 hover:border-[#FF40EB]/60 transition-all duration-300">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-[#FF40EB]/25 bg-[#FF40EB]/10 text-[#FF40EB]">
+                    <item.icon size={22} aria-hidden="true" />
+                  </div>
                   <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
                   <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
                 </div>
@@ -326,43 +468,70 @@ const CoursePage = ({ course }) => {
         {/* ── TESTIMONIALS ── */}
         <section className="bg-black py-16 px-4 sm:px-6 border-t border-[#FF40EB]/10">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-[#FF40EB]">
-              What Our Students Say
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { quote: "I joined NIGAPE right after Class 12. In 3 months I built my first AI support bot and portfolio website.", name: "Rohit Sharma", role: "Class 12 Graduate", img: "https://i.pravatar.cc/40?img=1" },
-                { quote: "As a working professional in marketing, I used NIGAPE to transition into AI automation consulting. The live classes helped me switch roles with confidence.", name: "Priya Verma", role: "Working Professional", img: "https://i.pravatar.cc/40?img=2" },
-                { quote: "The sprint-based project model is unmatched. My portfolio now has 6 real AI projects that impressed my interviewers.", name: "Vikram Nair", role: "Software Engineer", img: "https://i.pravatar.cc/40?img=6" },
-                { quote: "After completing the Advanced GenAI program, I got hired as a Prompt Engineer at a Delhi-based SaaS startup.", name: "Deepika Reddy", role: "Prompt Engineer", img: "https://i.pravatar.cc/40?img=9" },
-                { quote: "NIGAPE changed how I think about AI. Not just theory — actual business use-cases, RAG pipelines, and agent workflows.", name: "Karan Malhotra", role: "Product Manager", img: "https://i.pravatar.cc/40?img=11" },
-                { quote: "I had zero coding background but NIGAPE's guided learning tracks made LLMs and GenAI accessible within 2 months.", name: "Simran Kaur", role: "BBA Student", img: "https://i.pravatar.cc/40?img=5" },
-              ].map((t, i) => (
-                <div key={i} className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
-                  <div className="text-2xl text-[#9234eb] mb-3">&ldquo;</div>
-                  <p className="text-gray-700 text-sm leading-relaxed flex-1">{t.quote}</p>
-                  <div className="mt-4 flex items-center gap-3 pt-4 border-t border-gray-100">
-                    <img src={t.img} alt={t.name} className="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                      <p className="font-semibold text-gray-900 text-sm">{t.name}</p>
-                      <p className="text-xs text-gray-500">{t.role}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="mx-auto mb-10 max-w-3xl text-center">
+              <h2 className="text-3xl md:text-4xl font-black text-white">
+                What Our <span className="text-[#FF40EB]">Students Say</span>
+              </h2>
+              <p className="mt-4 text-sm md:text-base leading-7 text-gray-400">
+                Real student reviews from our Generative AI, Prompt Engineering, AI Literacy, and career-focused training cohorts at NIGAPE across classroom and online learning modes.
+              </p>
             </div>
+
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              slidesPerView={1}
+              spaceBetween={24}
+              loop={true}
+              autoplay={{ delay: 4200, disableOnInteraction: false }}
+              pagination={{ clickable: true }}
+              breakpoints={{
+                768: { slidesPerView: 2 },
+                1200: { slidesPerView: 3 },
+              }}
+              className="pb-12"
+              aria-label="Student testimonials carousel"
+            >
+              {testimonials.map((t, i) => (
+                <SwiperSlide key={`${t.name}-${i}`} className="!h-auto">
+                  <article className="flex h-[430px] md:h-[460px] flex-col rounded-[28px] border border-white/10 bg-white p-6 shadow-[0_24px_60px_rgba(146,52,235,0.14)]">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-[#9234eb]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9234eb]">
+                        <BadgeCheck size={14} aria-hidden="true" />
+                        {t.program}
+                      </span>
+                      <span className="text-xs font-semibold text-[#9234eb]">5.0 ★ Review</span>
+                    </div>
+
+                    <div className="mt-5 text-3xl leading-none text-[#9234eb]">&ldquo;</div>
+
+                    <p className="mt-3 flex-1 overflow-hidden text-sm leading-7 text-gray-700 line-clamp-6 md:text-[15px] md:line-clamp-7">
+                      {t.quote}
+                    </p>
+
+                    <div className="mt-5 rounded-2xl border border-[#9234eb]/10 bg-[#faf5ff] p-4 min-h-[92px]">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9234eb]">Student Outcome</p>
+                      <p className="mt-2 text-sm font-medium leading-6 text-gray-800 line-clamp-2">{t.outcome}</p>
+                    </div>
+
+                    <div className="mt-5 flex items-center gap-3 border-t border-gray-100 pt-4">
+                      <img src={t.img} alt={t.name} className="h-12 w-12 rounded-full object-cover" loading="lazy" />
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">{t.name}</p>
+                        <p className="text-xs uppercase tracking-[0.14em] text-gray-500">{t.role}</p>
+                      </div>
+                    </div>
+                  </article>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </section>
 
         {/* ── FAQ ── */}
-        <section className="bg-black py-16 px-4 sm:px-6 border-t border-[#FF40EB]/10">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-white">
-              Frequently Asked <span className="text-[#FF40EB]">Questions</span>
-            </h2>
-            <CourseFAQ />
-          </div>
-        </section>
+      
+        <Homsection7 />
+
+
 
       </div>
     </>
