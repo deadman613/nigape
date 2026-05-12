@@ -263,10 +263,10 @@ const CoursePage = ({ course }) => {
                 const recImg = courseGraphicMap[rec.title] || rec.image || "https://via.placeholder.com/600x300?text=Course";
                 return (
                   <Link key={rec.id} href={`/courses/${rec.slug}`} className="group block bg-black/40 border border-[#FF40EB]/20 rounded-2xl overflow-hidden hover:border-[#FF40EB]/60 transition-all duration-300">
-                    <div className="relative h-40 bg-black">
-                      <img src={recImg} alt={rec.title} className="w-full h-full object-contain" loading="lazy" />
+                    <div className="relative h-30 bg-black">
+                      <img src={recImg} alt={rec.title} className="w-full h-full object-cover" loading="lazy" />
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 h-40">
                       <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">{rec.title}</h3>
                       <p className="text-gray-400 text-xs mb-3 line-clamp-2">{rec.description}</p>
                       <span className="text-[#FF40EB] text-xs font-semibold group-hover:underline">View Course →</span>

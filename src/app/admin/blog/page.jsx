@@ -24,7 +24,6 @@ export default async function AdminBlogPage() {
   const publishedCount = blogs.filter((b) => b.published).length;
   const draftsCount = blogs.filter((b) => !b.published).length;
   const archivedCount = 0;
-  const recentPosts = blogs.slice(0, 8);
   const stats = [
     { label: "Total Posts", value: totalPosts, icon: FileText, tone: "total" },
     { label: "Published", value: publishedCount, icon: CircleCheckBig, tone: "published" },
@@ -63,15 +62,12 @@ export default async function AdminBlogPage() {
         })}
       </div>
 
-      <section className="admin-table-card" aria-label="Recent posts">
+      <section className="admin-table-card" aria-label="All posts">
         <header className="admin-table-card__header">
-          <h2>Recent Posts</h2>
-          <Link href="/admin/blog" className="admin-table-card__link">
-            View all
-          </Link>
+          <h2>All Posts</h2>
         </header>
 
-        {recentPosts.length ? (
+        {blogs.length ? (
           <div className="admin-table-wrap">
             <table className="admin-table">
               <thead>
@@ -85,7 +81,7 @@ export default async function AdminBlogPage() {
                 </tr>
               </thead>
               <tbody>
-                {recentPosts.map((blog) => (
+                {blogs.map((blog) => (
                   <tr key={blog.id}>
                     <td>
                       <p className="admin-table__title">{blog.title}</p>
