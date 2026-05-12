@@ -238,7 +238,7 @@ export default function About() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
+            className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
           >
             India's First Dedicated
             <br className="hidden sm:block" />
@@ -291,7 +291,7 @@ export default function About() {
       </section>
 
       {/* Real Humans Section */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gray-900 relative">
+      <section className="py-16 sm:py-24 md:py-20 px-4 sm:px-6 bg-gray-900 relative">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20 items-center">
           <motion.div
             initial={{ opacity: 0, x: -80 }}
@@ -330,7 +330,7 @@ export default function About() {
       </section>
 
       {/* Features */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-gray-900/10">
+      <section className="py-16 sm:py-24 md:py-10 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-gray-900/10">
         <div className="max-w-7xl mx-auto">
           <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-white mb-10 md:mb-16">
             What Makes NIGAPE Different

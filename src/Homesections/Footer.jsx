@@ -16,7 +16,7 @@ const InstagramIcon = () => (
 export default function Footer() {
   return (
     <>
-      <footer className="relative w-full bg-black border-t border-[#FF40EB]/20 overflow-hidden">
+      <footer className="relative w-full md:pb-0 pb-28 bg-black border-t border-[#FF40EB]/20 overflow-hidden">
 
         <div className="absolute inset-0 bg-top-glow pointer-events-none" />
 
