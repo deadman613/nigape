@@ -58,9 +58,10 @@ export default function EnrollmentPopupGate() {
         ...formData,
         source: "website-enrollment-popup",
         submittedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent,
       });
 
-      const response = await fetch(appsScriptUrl, { method: "POST", body: payload });
+      const response = await fetch(appsScriptUrl, { method: "POST", body: payload, redirect: "follow" });
 
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status}`);

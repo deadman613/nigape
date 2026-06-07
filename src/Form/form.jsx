@@ -10,6 +10,7 @@ export default function ResponsiveForm() {
     subject: '',
     message: ''
   });
+  const [submitState, setSubmitState] = useState({ status: 'idle', message: '' });
 
   const handleChange = (e) => {
     setFormData({
@@ -18,9 +19,34 @@ export default function ResponsiveForm() {
     });
   };
 
-  const handleSubmit = () => {
-    alert('Form submitted successfully!');
-    console.log(formData);
+  const handleSubmit = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const appsScriptUrl = process.env.NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL;
+    if (!appsScriptUrl) {
+      setSubmitState({ status: 'error', message: 'Form endpoint not configured.' });
+      return;
+    }
+
+    setSubmitState({ status: 'submitting', message: 'Submitting...' });
+
+    try {
+      const payload = new URLSearchParams({
+        ...formData,
+        source: 'website-contact-popup',
+        submittedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+      });
+
+      const response = await fetch(appsScriptUrl, { method: 'POST', body: payload, redirect: 'follow' });
+
+      if (!response.ok) throw new Error(`Status ${response.status}`);
+
+      setSubmitState({ status: 'success', message: 'Thanks! Your message was sent successfully.' });
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    } catch {
+      setSubmitState({ status: 'error', message: 'Submission failed. Please try again.' });
+    }
   };
 
   return (
@@ -38,7 +64,7 @@ export default function ResponsiveForm() {
             <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Get In Touch
             </h1>
-            <div className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-pink-400 mb-2 font-medium text-sm">
@@ -120,14 +146,20 @@ export default function ResponsiveForm() {
                   placeholder="Type your message here..."
                 ></textarea>
               </div>
+              {submitState.status !== 'idle' && (
+                <p className={`text-sm text-center ${submitState.status === 'success' ? 'text-green-400' : submitState.status === 'error' ? 'text-red-400' : 'text-gray-300'}`}>
+                  {submitState.message}
+                </p>
+              )}
               <button
-                onClick={handleSubmit}
-                className="w-full py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-lg hover:from-pink-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-pink-500/50 transition-all transform hover:scale-105 shadow-lg"
+                type="submit"
+                disabled={submitState.status === 'submitting'}
+                className="w-full py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-lg hover:from-pink-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-pink-500/50 transition-all transform hover:scale-105 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{boxShadow: '0 10px 30px rgba(236, 72, 153, 0.4)'}}
               >
-                Send Message
+                {submitState.status === 'submitting' ? 'Sending...' : 'Send Message'}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

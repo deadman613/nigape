@@ -154,11 +154,13 @@ export default function ContactPage() {
         ...formData,
         source: "website-contact-us",
         submittedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent,
       });
 
       const response = await fetch(appsScriptUrl, {
         method: "POST",
         body: payload,
+        redirect: "follow",
       });
 
       if (!response.ok) {
