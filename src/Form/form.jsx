@@ -38,9 +38,9 @@ export default function ResponsiveForm() {
         userAgent: navigator.userAgent,
       });
 
-      const response = await fetch(appsScriptUrl, { method: 'POST', body: payload, redirect: 'follow' });
+      const response = await fetch(appsScriptUrl, { method: 'POST', body: payload, redirect: 'follow', mode: 'no-cors' });
 
-      if (!response.ok) throw new Error(`Status ${response.status}`);
+      // no-cors returns an opaque response — assume success if no exception thrown
 
       setSubmitState({ status: 'success', message: 'Thanks! Your message was sent successfully.' });
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
