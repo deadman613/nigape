@@ -43,14 +43,6 @@ export default function EnrollmentPopupGate() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!appsScriptUrl) {
-      setSubmitState({
-        status: "error",
-        message: "Form endpoint not configured. Add NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL.",
-      });
-      return;
-    }
-
     setSubmitState({ status: "submitting", message: "Submitting your request..." });
 
     try {
@@ -61,9 +53,12 @@ export default function EnrollmentPopupGate() {
         userAgent: navigator.userAgent,
       });
 
-      const response = await fetch(appsScriptUrl, { method: "POST", body: payload, redirect: "follow", mode: "no-cors" });
+      const response = await fetch("/api/submit-lead", { method: "POST", body: payload });
 
-      // no-cors returns an opaque response — assume success if no exception thrown
+      const data = await response.json();
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.error || `Status ${response.status}`);
+      }
 
       setSubmitState({ status: "success", message: "Thanks! Your details were submitted successfully." });
       setFormData(initialForm);

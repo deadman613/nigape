@@ -87,14 +87,6 @@ export default function Homee() {
     }
     setFormErrors({});
 
-    if (!appsScriptUrl) {
-      setSubmitState({
-        status: "error",
-        message: "Form endpoint not configured. Add NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL.",
-      });
-      return;
-    }
-
     setSubmitState({ status: "submitting", message: "Submitting your request..." });
 
     try {
@@ -102,15 +94,17 @@ export default function Homee() {
         ...formData,
         source: "website-popup",
         submittedAt: new Date().toISOString(),
+        userAgent: navigator.userAgent,
       });
 
-      const response = await fetch(appsScriptUrl, {
+      const response = await fetch("/api/submit-lead", {
         method: "POST",
         body: payload,
       });
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
+      const data = await response.json();
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.error || `Status ${response.status}`);
       }
 
       setSubmitState({
