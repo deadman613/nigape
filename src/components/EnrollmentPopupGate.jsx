@@ -62,8 +62,11 @@ export default function EnrollmentPopupGate() {
 
       setSubmitState({ status: "success", message: "Thanks! Your details were submitted successfully." });
       setFormData(initialForm);
-    } catch {
-      setSubmitState({ status: "error", message: "Submission failed. Please try again." });
+    } catch (error) {
+      setSubmitState({
+        status: "error",
+        message: error instanceof Error ? error.message : "Submission failed. Please try again.",
+      });
     }
   };
 

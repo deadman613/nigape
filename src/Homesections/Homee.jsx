@@ -115,7 +115,7 @@ export default function Homee() {
     } catch (error) {
       setSubmitState({
         status: "error",
-        message: "Submission failed. Please try again.",
+        message: error instanceof Error ? error.message : "Submission failed. Please try again.",
       });
     }
   };

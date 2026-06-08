@@ -164,10 +164,10 @@ export default function ContactPage() {
         message: "Thanks! Your details were submitted successfully.",
       });
       setFormData({ name: "", email: "", phone: "", course: "", city: "", message: "" });
-    } catch {
+    } catch (error) {
       setSubmitState({
         status: "error",
-        message: "Submission failed. Please try again.",
+        message: error instanceof Error ? error.message : "Submission failed. Please try again.",
       });
     }
   };

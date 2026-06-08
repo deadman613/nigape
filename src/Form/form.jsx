@@ -47,8 +47,11 @@ export default function ResponsiveForm() {
 
       setSubmitState({ status: 'success', message: 'Thanks! Your message was sent successfully.' });
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-    } catch {
-      setSubmitState({ status: 'error', message: 'Submission failed. Please try again.' });
+    } catch (error) {
+      setSubmitState({
+        status: 'error',
+        message: error instanceof Error ? error.message : 'Submission failed. Please try again.',
+      });
     }
   };
 
