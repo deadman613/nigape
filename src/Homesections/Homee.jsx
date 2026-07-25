@@ -280,7 +280,7 @@ export default function Homee() {
         <section className="flex-1  flex items-center">
           <div className="mx-auto pt-5 md:pt-20 w-full max-w-7xl px-4">
             <div className="space-y-10 text-center max-w-8xl mx-auto">
-              <h1 
+              <h1
                 className=" font-black uppercase tracking-tight leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-[3.8rem] drop-shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
                 style={{ fontWeight: 800 }} // Explicitly force Black weight
               >
@@ -302,32 +302,43 @@ export default function Homee() {
                 <span className="inline-block px-4 py-1 rounded-full bg-linear-r  to-black/20 text-black text-xs sm:text-sm font-semibold shadow-md border border-blue-400/60">Online</span>
                 <span className="inline-block px-4 py-1 rounded-full bg-linear-r  to-black/20 text-black text-xs sm:text-sm font-semibold shadow-md border border-green-400/60">Offline</span>
               </div> */}
-              
+
               <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-xl mx-auto leading-relaxed">
                 Learn through immersive campus and online cohorts. Build real projects in Generative AI, Prompt Engineering, agents, and automation with mentor support for internships and placements.
               </p>
 
-              <div className="flex flex-col sm:flex-row justify-center gap-5 pt-2">
-                <Link href="?enroll=1" className="rounded-full bg-[#FF40EB] px-10 py-3 font-bold text-white shadow-[0_0_35px_rgba(147,51,234,0.6)] hover:shadow-[0_0_55px_rgba(147,51,234,0.8)] hover:scale-105 transition flex items-center justify-center">
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-x-6 pt-2 max-w-2xl mx-auto">
+                {/* Row 1 */}
+                <Link
+                  href="?enroll=1"
+                  className="rounded-full bg-[#FF40EB] px-10 py-1 font-bold text-white shadow-[0_0_35px_rgba(147,51,234,0.6)] hover:shadow-[0_0_55px_rgba(147,51,234,0.8)] hover:scale-105 transition flex items-center justify-center"
+                >
                   Enroll Now
                 </Link>
-                <Link href="/courses" className="rounded-full border-2 border-[#FF40EB] px-10 py-3 font-bold hover:bg-purple-600/15 transition backdrop-blur-sm flex items-center justify-center">
+                <Link
+                  href="/courses"
+                  className="rounded-full border-2 border-[#FF40EB] px-10 py-2 font-bold hover:bg-purple-600/15 transition backdrop-blur-sm flex items-center justify-center"
+                >
                   Explore Our Courses
                 </Link>
-              </div>
 
-              {/* Degree & PG Program quick links */}
-              <div className="flex flex-col sm:flex-row justify-center gap-4 pt-1">
-                <Link href="/programs/degree-in-ai" className="rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-7 py-2.5 text-sm font-semibold text-white hover:border-[#FF40EB]/60 hover:bg-[#FF40EB]/10 transition flex items-center justify-center gap-2">
-                  Degree Programs <span className="text-[#FF40EB] text-xs">(3 Years)</span>
+                {/* Row 2 */}
+                <Link
+                  href="/programs/degree-in-ai"
+                  className="rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-7 py-2.5 text-sm font-semibold text-white hover:border-[#FF40EB]/60 hover:bg-[#FF40EB]/10 transition flex items-center justify-center gap-2"
+                >
+                  UG Degree Programs <span className="text-green-500 text-xs">(3 Years)</span>
                 </Link>
-                <Link href="/programs/pg-in-ai" className="rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-7 py-2.5 text-sm font-semibold text-white hover:border-[#9234eb]/60 hover:bg-[#9234eb]/10 transition flex items-center justify-center gap-2">
-                  PG Programs <span className="text-[#9234eb] text-xs">(2 Years)</span>
+                <Link
+                  href="/programs/pg-in-ai"
+                  className="rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-7 py-2.5 text-sm font-semibold text-white hover:border-[#9234eb]/60 hover:bg-[#9234eb]/10 transition flex items-center justify-center gap-2"
+                >
+                  PG Programs <span className="text-green-500  text-xs">(2 Years)</span>
                 </Link>
               </div>
-
-            {/* Modal Form Popup */}
-            {mounted && createPortal(popupModal, document.body)}
+              {/* Modal Form Popup */}
+              {mounted && createPortal(popupModal, document.body)}
             </div>
           </div>
         </section>

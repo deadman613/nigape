@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const PHONE_E164 = "+917428114918";
 const PHONE_WA = "917428114918";
@@ -13,7 +14,8 @@ export default function FloatingContactButtons() {
   return (
     <div className="fixed inset-x-4 bottom-4 z-[9999] sm:inset-x-auto sm:bottom-6 sm:right-6">
       <div className="flex w-full flex-row gap-2 rounded-2xl border border-[#FF40EB]/25 bg-black/80 p-2 backdrop-blur-md shadow-[0_18px_40px_rgba(0,0,0,0.4)] sm:w-auto sm:flex-col sm:gap-3 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
-        <a
+
+       <a 
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
@@ -50,6 +52,27 @@ export default function FloatingContactButtons() {
           </span>
           <span className="sm:hidden">Phone</span>
         </a>
+
+        <Link
+          href="?enroll=1"
+          aria-label="form"
+          className={buttonClass}
+        >
+          <span
+            className={`${iconWrapperClass} flex items-center justify-center rounded-full bg-green-500 group-hover:bg-[#ff5cef] transition`}
+          >
+            <span className="relative h-4 w-4 sm:h-5 sm:w-5">
+              <Image
+                src="/logos/form.png"
+                alt=""
+                fill
+                className="object-contain brightness-0 invert transition group-hover:scale-110"
+                aria-hidden="true"
+              />
+            </span>
+          </span>
+          <span className="sm:hidden">Form</span>
+        </Link>
       </div>
     </div>
   );
