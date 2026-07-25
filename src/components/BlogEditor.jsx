@@ -87,7 +87,7 @@ const controls = [
   },
 ];
 
-// Inline link dialog component — uses <div> not <form> to avoid nesting inside BlogForm's <form>
+// ── Link dialog ──────────────────────────────────────────────────────────────
 const LinkDialog = ({ editor, savedSelection, onClose }) => {
   const [url, setUrl] = useState(() => editor.getAttributes("link").href || "");
   const inputRef = useRef(null);
@@ -170,8 +170,191 @@ const LinkDialog = ({ editor, savedSelection, onClose }) => {
   );
 };
 
+// ── Image insert dialog ───────────────────────────────────────────────────────
+const ImageDialog = ({ editor, onClose }) => {
+  const [tab, setTab] = useState("upload"); // "upload" | "url"
+  const [imageUrl, setImageUrl] = useState("");
+  const [altText, setAltText] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [error, setError] = useState("");
+  const fileInputRef = useRef(null);
+  const urlInputRef = useRef(null);
+
+  useEffect(() => {
+    if (tab === "url") urlInputRef.current?.focus();
+  }, [tab]);
+
+  const insertImage = (src, alt) => {
+    if (!src) return;
+    editor.chain().focus().setImage({ src, alt: alt || "" }).run();
+    // Insert a paragraph after so the user can keep typing
+    editor.chain().focus().createParagraphNear().run();
+    onClose();
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Immediate local preview while upload runs
+    const objectUrl = URL.createObjectURL(file);
+    setPreview(objectUrl);
+    setError("");
+    setUploading(true);
+
+    try {
+      const { withAdminCsrf } = await import("@/lib/client-csrf");
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", withAdminCsrf({ method: "POST", body: fd }));
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      setImageUrl(data.url);
+      setError("");
+    } catch (err) {
+      setError(err.message || "Upload failed. Try using a URL instead.");
+      setImageUrl("");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleInsert = () => {
+    const src = imageUrl.trim();
+    if (!src) { setError("Please upload an image or enter a URL."); return; }
+    insertImage(src, altText);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") onClose();
+    if (e.key === "Enter" && tab === "url") { e.preventDefault(); handleInsert(); }
+  };
+
+  return (
+    <div className="editor__link-backdrop" onClick={onClose}>
+      <div
+        className="editor__link-dialog editor__img-dialog"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={handleKeyDown}
+        style={{ minWidth: 320, maxWidth: 420 }}
+      >
+        <div className="editor__link-dialog-title">Insert Image</div>
+
+        {/* Tabs */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+          <button
+            type="button"
+            className={`editor__link-btn${tab === "upload" ? " editor__link-btn--primary" : ""}`}
+            onClick={() => setTab("upload")}
+            style={{ flex: 1 }}
+          >
+            📁 Upload File
+          </button>
+          <button
+            type="button"
+            className={`editor__link-btn${tab === "url" ? " editor__link-btn--primary" : ""}`}
+            onClick={() => setTab("url")}
+            style={{ flex: 1 }}
+          >
+            🔗 From URL
+          </button>
+        </div>
+
+        {/* Upload tab */}
+        {tab === "upload" && (
+          <div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            <button
+              type="button"
+              className="editor__link-btn"
+              style={{ width: "100%", marginBottom: 10, padding: "10px" }}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading…" : "Choose Image from Computer"}
+            </button>
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                style={{
+                  width: "100%", maxHeight: 180, objectFit: "contain",
+                  borderRadius: 8, marginBottom: 10, background: "#111",
+                }}
+              />
+            )}
+            {uploading && (
+              <p style={{ fontSize: "0.8rem", color: "#888", marginBottom: 8 }}>
+                Uploading to image host…
+              </p>
+            )}
+            {imageUrl && !uploading && (
+              <p style={{ fontSize: "0.78rem", color: "#4ade80", marginBottom: 8, wordBreak: "break-all" }}>
+                ✓ Ready to insert
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* URL tab */}
+        {tab === "url" && (
+          <input
+            ref={urlInputRef}
+            className="editor__link-input"
+            type="text"
+            placeholder="https://example.com/image.webp"
+            value={imageUrl}
+            onChange={(e) => { setImageUrl(e.target.value); setPreview(e.target.value); }}
+            style={{ marginBottom: 10 }}
+          />
+        )}
+
+        {/* Alt text — always visible */}
+        <input
+          className="editor__link-input"
+          type="text"
+          placeholder="Alt text (describe the image for SEO)"
+          value={altText}
+          onChange={(e) => setAltText(e.target.value)}
+          style={{ marginBottom: 4 }}
+        />
+        <p style={{ fontSize: "0.75rem", color: "#888", marginBottom: 12 }}>
+          Alt text improves SEO and accessibility.
+        </p>
+
+        {error && (
+          <p style={{ fontSize: "0.8rem", color: "#f87171", marginBottom: 10 }}>{error}</p>
+        )}
+
+        <div className="editor__link-actions">
+          <button type="button" className="editor__link-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="editor__link-btn editor__link-btn--primary"
+            onClick={handleInsert}
+            disabled={uploading || !imageUrl.trim()}
+          >
+            Insert Image
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── Main editor ───────────────────────────────────────────────────────────────
 const BlogEditor = ({ value, onChange }) => {
   const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [showImageDialog, setShowImageDialog] = useState(false);
   const savedSelectionRef = useRef(null);
 
   const editor = useEditor({
@@ -253,12 +436,26 @@ const BlogEditor = ({ value, onChange }) => {
         >
           🔗
         </button>
+        <button
+          type="button"
+          title="Insert Image"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => setShowImageDialog(true)}
+        >
+          🖼️
+        </button>
       </div>
       {showLinkDialog && (
         <LinkDialog
           editor={editor}
           savedSelection={savedSelectionRef.current}
           onClose={() => setShowLinkDialog(false)}
+        />
+      )}
+      {showImageDialog && (
+        <ImageDialog
+          editor={editor}
+          onClose={() => setShowImageDialog(false)}
         />
       )}
       <EditorContent editor={editor} />
