@@ -58,14 +58,14 @@ const team = [
   {
     name: " Mr Manjeet singh",
     role: "Senior Developer",
-    img: "Nigapepic/manjeet.webp",
+     img: "shagun.png",
     colorFrom: "#06b6d4",
     colorTo: "#0e7490",
   },
   {
     name: "Harvinder singh",
     role: "Graphic Designer",
-    img: "Nigapepic/pajii.png",
+     img: "shagun.png",
     colorFrom: "#a855f7",
     colorTo: "#7c3aed",
   },
