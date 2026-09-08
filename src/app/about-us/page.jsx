@@ -56,19 +56,13 @@ const team = [
     colorTo: "#d97706",
   },
   {
-    name: " Mr Manjeet singh",
-    role: "Senior Developer",
-     img: "shagun.png",
+    name: " Dr Gulshan Kumar",
+    role: "Founder & CEO",
+     img: "gulshan-kumar.avif",
     colorFrom: "#06b6d4",
     colorTo: "#0e7490",
   },
-  {
-    name: "Harvinder singh",
-    role: "Graphic Designer",
-     img: "shagun.png",
-    colorFrom: "#a855f7",
-    colorTo: "#7c3aed",
-  },
+ 
 ];
 
 
@@ -114,7 +108,7 @@ const TeamCard = memo(({ member, index }) => (
           background: `linear-gradient(to bottom right, ${member.colorFrom}, ${member.colorTo})`,
         }}
       >
-        <div className=" bg-gray-900 rounded-3xl px-2 py-3 md:px-3 md:py-4 h-auto flex flex-col justify-between overflow-hidden">
+        <div className=" bg-gray-900 rounded-3xl px-2 py-3 md:px-3 md:py-4 h-auto flex flex-col  justify-between overflow-hidden">
           <div className="w-full aspect-[4/5] rounded-2xl overflow-hidden mb-3 flex items-center justify-center bg-gray-900">
             <img
               src={member.img}
@@ -353,7 +347,7 @@ export default function About() {
           </motion.h2>
           <p className="text-base sm:text-lg text-gray-400 mb-8">Our mentors help learners become role-ready for GenAI teams across India.</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto">
             {team.map((member, i) => (
               <TeamCard key={i} member={member} index={i} />
             ))}
