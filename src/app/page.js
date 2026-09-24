@@ -18,7 +18,7 @@ import PopularDiplomaCourses from "@/Homesections/PopularDiplomaCourses";
 export const metadata = {
   title: "Generative AI & Prompt Engineering Course in Delhi | NIGAPE",
   description:
-    "Join NIGAPE for a Generative AI and Prompt Engineering course in Delhi. Learn AI tools, LLMs, prompting, agents, and real projects with mentor support, certification, and placement guidance.",
+    "Join NIGAPE for Generative AI & Prompt Engineering in Delhi. Learn AI tools, LLMs, prompting, agents and real projects with mentor support.",
   keywords: [
     "generative AI course in Delhi",
     "prompt engineering course in Delhi",
