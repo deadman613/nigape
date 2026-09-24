@@ -15,8 +15,31 @@ const fetchBlogs = async (searchParams) => {
 };
 
 export const metadata = {
-  title: "Blog | NIGAPE",
-  description: "AI insights, career playbooks, and tech updates from the NIGAPE team.",
+  title: "Generative AI & Prompt Engineering Blog | NIGAPE",
+  description:
+    "Explore Generative AI and Prompt Engineering guides, trends, tools, tutorials, and career insights from NIGAPE, built for practical AI learning.",
+  keywords: [
+    "generative AI trends 2026",
+    "prompt engineering techniques",
+    "how to write prompts for AI",
+    "generative AI use cases",
+    "prompt engineering tools",
+    "LLM prompting best practices",
+    "AI prompt templates",
+    "prompt engineering examples",
+    "generative AI applications",
+    "career in prompt engineering",
+  ],
+  alternates: {
+    canonical: "https://www.nigape.com/blog",
+  },
+  openGraph: {
+    title: "Generative AI & Prompt Engineering Blog | NIGAPE",
+    description:
+      "Practical Generative AI and Prompt Engineering guides, tools, tutorials, use cases, and career insights from NIGAPE.",
+    url: "https://www.nigape.com/blog",
+    type: "website",
+  },
 };
 
 export default async function BlogPage({ searchParams }) {
@@ -54,13 +77,13 @@ export default async function BlogPage({ searchParams }) {
             <div>
               <p className="text-[#FF40EB] font-semibold text-sm uppercase tracking-widest mb-2">Stories & Updates</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3">
-                Insights for{" "}
+                Generative AI &{" "}
                 <span className="bg-gradient-to-r from-[#9234eb] to-[#FF40EB] bg-clip-text text-transparent">
-                  Builders & Learners
+                  Prompt Engineering Blog
                 </span>
               </h1>
               <p className="text-white/60 max-w-xl leading-relaxed">
-                AI trends, career playbooks, and real-world guides from the NIGAPE team.
+                Discover Generative AI trends, prompt engineering techniques, AI tools, LLM prompting best practices, practical use cases, and career guidance from the NIGAPE team.
               </p>
               <p className="text-white/40 text-sm mt-3">{data?.pagination?.total || 0} articles · Updated weekly</p>
             </div>

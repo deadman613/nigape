@@ -234,7 +234,7 @@ export default function About() {
             transition={{ duration: 1 }}
             className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
           >
-            India's First Dedicated
+            About NIGAPE: India's Dedicated
             <br className="hidden sm:block" />
             GenAI & Prompt Engineering Institute
           </motion.h1>
@@ -245,7 +245,7 @@ export default function About() {
             transition={{ delay: 0.45, duration: 1 }}
             className="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
           >
-            Not just another classroom. Learn from our campus and online cohorts, build real GenAI projects, and graduate with a portfolio built for AI hiring teams.
+            NIGAPE is a Generative AI and Prompt Engineering institute in Delhi. Learn through campus and online cohorts, build practical AI projects with expert mentorship, and graduate with career support and a portfolio built for AI hiring teams.
           </motion.p>
 
           <motion.div

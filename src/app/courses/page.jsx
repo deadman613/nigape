@@ -222,15 +222,15 @@ export default function CoursesPage() {
       <section className="relative py-6 lg:py-10 lg:pb-20 px-6 bg-black/40 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-4 lg:gap-12 items-center">
           <div className="w-full text-center lg:text-left lg:order-2">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 lg:mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 lg:mb-8">
               <span className="bg-[#FF40EB] bg-clip-text tracking-[3px] text-transparent">
-                Building India's Next Generation of GenAI &amp; Prompt Engineering Leaders
+                Generative AI &amp; Prompt Engineering Courses
               </span>
-            </h2>
+            </h1>
             <p className="text-base lg:text-xl text-gray-400 mb-6 lg:mb-10 leading-relaxed">
-              Our curriculum is industry-driven and designed to bridge real hiring needs.
-              You don't just learn concepts here — you build, deploy, and improve real-world
-              AI systems used by startups and business teams.
+              Compare our Generative AI and Prompt Engineering courses in Delhi, from AI literacy
+              to advanced certification programs. Build real-world projects with mentorship,
+              explore online learning options, and prepare for AI careers with placement support.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-5 justify-center lg:justify-start">
               <Link

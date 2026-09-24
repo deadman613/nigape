@@ -71,6 +71,9 @@ const CoursePage = ({ course }) => {
   };
   const courseGraphic = courseGraphicMap[course.title];
   const imageSrc = courseGraphic || course.image || "https://via.placeholder.com/600x300?text=Course+Image";
+  const displayTitle = course.slug === "advanced-generative-ai-prompt-engineering"
+    ? `${course.title} Course`
+    : course.title;
   const testimonials = [
     {
       quote: "I joined NIGAPE's Generative AI and Prompt Engineering diploma after Class 12. Within 3 months I built my first AI support bot, portfolio website, and prompt library. The mentors made AI learning practical from day one.",
@@ -148,7 +151,7 @@ const CoursePage = ({ course }) => {
   return (
     <>
       <Head>
-        <title>{course.title} | NIGAPE</title>
+        <title>{displayTitle} | NIGAPE</title>
         <meta name="description" content={course.description} />
       </Head>
 
@@ -176,7 +179,7 @@ const CoursePage = ({ course }) => {
                     {course.level.charAt(0).toUpperCase() + course.level.slice(1)} • {course.mode || "Hybrid Learning"}
                   </span>
                   <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#FF40EB] to-[#FF40EB] text-transparent bg-clip-text">
-                    {course.title}
+                    {displayTitle}
                   </h1>
                   <p className="text-gray-300 mt-2">{course.description}</p>
                 </div>

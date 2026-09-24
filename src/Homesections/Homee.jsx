@@ -304,7 +304,7 @@ export default function Homee() {
               </div> */}
 
               <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-xl mx-auto leading-relaxed">
-                Learn through immersive campus and online cohorts. Build real projects in Generative AI, Prompt Engineering, agents, and automation with mentor support for internships and placements.
+                Join NIGAPE, a Generative AI institute in Delhi, for practical training in Prompt Engineering, AI tools, LLMs, agents, and automation. Build real projects through mentor-led cohorts and prepare for certification and placement opportunities.
               </p>
 
 

@@ -22,6 +22,16 @@ export const metadata = {
   verification: {
     google: "p-LDTwKh1RWq4EXjYEnEhRI9bhHhSzmRpcFIbBtABHg",
   },
+  robots: {
+    index: true,
+    follow: true,
+    maxSnippet: -1,
+    maxVideoPreview: -1,
+    maxImagePreview: "large",
+  },
+  other: {
+    Publisher: "Team NIGAPE",
+  },
   title: "NIGAPE - GK2 Delhi Institute of Generative AI & Prompt Engineering",
   description: "India-first institute dedicated to Generative AI and Prompt Engineering careers.",
   openGraph: {
@@ -51,6 +61,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta name="Publisher" content="Team NIGAPE" />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{

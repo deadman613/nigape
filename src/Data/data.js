@@ -16,7 +16,7 @@ export const courses = [
     monthlyPrice: "₹10,417",
     monthlyPayments: 12,
     image: "https://via.placeholder.com/600x300?text=Generative+AI+Diploma",
-    description: "Perfect for beginners, 12th-pass students, and career switchers. Build strong foundations in AI/ML, Python, prompt engineering, LLMs, and hands-on projects in text, vision & multimodal AI.",
+    description: "Perfect for beginners, 12th-pass students, and career switchers. Build strong foundations in AI/ML, Python, prompt engineering, LLMs, RAG, and hands-on projects in text, vision, and multimodal AI with portfolio and placement support.",
     fullDescription: "This comprehensive 12-month diploma program takes beginners from zero to job-ready in Generative AI. Learn Python for AI, prompt engineering mastery, core LLM concepts, and build real-world projects in language, vision, and multimodal AI. Graduates receive a professional portfolio and are prepared for roles like AI Developer, Prompt Engineer, or GenAI Specialist.",
     instructor: {
       name: "Shagun Srivastava",
@@ -132,7 +132,7 @@ export const courses = [
     monthlyPrice: "₹15,833",
     monthlyPayments: 6,
     image: "https://via.placeholder.com/600x300?text=Advanced+GenAI",
-    description: "Deep dive into advanced LLMs, fine-tuning, custom prompt frameworks, and enterprise-grade generative AI systems.",
+    description: "Master advanced LLMs, prompt engineering, AI agents, RAG, automation, and enterprise-grade Generative AI through real projects designed for career-ready skills.",
     fullDescription: "Designed for learners with basic AI knowledge, this 6-month advanced program covers state-of-the-art generative models, fine-tuning techniques, advanced prompting, agentic systems, and production deployment of GenAI solutions.",
     instructor: {
       name: "Miss. Shagun",

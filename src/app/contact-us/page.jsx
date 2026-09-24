@@ -195,7 +195,7 @@ export default function ContactPage() {
             transition={{ duration: 1, delay: 0.4 }}
             className="text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-4 sm:mb-6 tracking-tight"
           >
-            Contact Us
+            Contact NIGAPE for Generative AI & Prompt Engineering
           </motion.h1>
 
           <motion.p
@@ -204,8 +204,7 @@ export default function ContactPage() {
             transition={{ delay: 0.8, duration: 1 }}
             className="text-base xs:text-lg md:text-xl text-white leading-relaxed max-w-xl sm:max-w-3xl mx-auto"
           >
-            Have questions about admissions, batches, or career support in Generative AI and Prompt Engineering?
-            Our institute team will guide you with clear next steps.
+            Have questions about our Generative AI and Prompt Engineering courses in Delhi? Contact our team for course fees, batches, syllabus, admission, registration, training details, and career guidance.
           </motion.p>
         </div>
       </section>
