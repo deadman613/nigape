@@ -112,8 +112,8 @@ export default function AIJobsSection() {
         {/* Hero */}
         <div className="ns-hero">
           <div className="ns-badge"><span className="ns-dot" />NIGAPE · GK2 Delhi · 2025</div>
-          <h1 className="ns-h1">AI Career <span>Landscape</span></h1>
-          <p className="ns-sub">Top AI roles, salary packages, and growth trajectories shaping India's future workforce — curated by NIGAPE Research Desk.</p>
+          <h2 className="ns-h1">AI Career <span>Landscape</span></h2>
+          <p className="ns-sub">Top AI roles, salary packages, and growth trajectories shaping India&apos;s future workforce — curated by NIGAPE Research Desk.</p>
         </div>
 
         {/* Stats */}

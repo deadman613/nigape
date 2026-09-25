@@ -69,10 +69,10 @@ export default function NigapePlacements() {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
               See Where Our Learners Are Building Their{' '}
               <span className="text-[#FF40EB]">AI Careers</span>
-            </h1>
+            </h2>
 
             {/* Subheading */}
             <p className="text-base sm:text-lg text-white/80 leading-relaxed max-w-2xl">

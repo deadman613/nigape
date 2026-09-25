@@ -10,6 +10,9 @@ const formatDate = (value) =>
 
 const toText = (html) => (html || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 
+const normalizeBlogHeadings = (html) =>
+  (html || "").replace(/<\/?h1\b/gi, (tag) => tag.replace(/h1/i, "h2"));
+
 const calculateReadingMinutes = (html) => {
   const words = toText(html).split(" ").filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 220));
@@ -111,6 +114,7 @@ export default async function BlogDetails(props) {
   const baseUrl = await getBaseUrl();
   const related = await fetchRelated(slug, baseUrl);
   const cover = blog.coverImg?.trim();
+  const content = normalizeBlogHeadings(blog.content);
   const isExternalCover = Boolean(cover && /^(https?:)?\/\//i.test(cover));
   const hasCover = Boolean(cover);
   const imageSrc = hasCover ? cover : "/placeholder.svg";
@@ -169,7 +173,7 @@ export default async function BlogDetails(props) {
           {isPlaceholder ? <span className="cover__hint">Upload a cover image from the admin panel to replace this default artwork.</span> : null}
         </div>
 
-        <div className="content" dangerouslySetInnerHTML={{ __html: blog.content }} />
+        <div className="content" dangerouslySetInnerHTML={{ __html: content }} />
 
         <section className="blog-detail__footer-cta" aria-label="Continue reading">
           <p>Want more insights like this?</p>

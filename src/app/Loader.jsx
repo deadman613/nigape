@@ -91,7 +91,7 @@ export default function NeoLeafLoader() {
         {/* Logo text with liquid fill effect */}
         <div className="mb-8 relative">
           {/* Background dark gray text (for depth) */}
-          <h1 
+          <div 
             className="loader-bg text-5xl sm:text-7xl md:text-9xl lg:text-[10rem] xl:text-[12rem] font-black tracking-tight absolute top-0 left-1/2 -translate-x-1/2 text-center"
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
@@ -101,7 +101,7 @@ export default function NeoLeafLoader() {
             }}
           >
             {fullText}
-          </h1>
+          </div>
           
           {/* White text with liquid fill mask */}
           <div 
@@ -111,7 +111,7 @@ export default function NeoLeafLoader() {
               transition: 'clip-path 0.3s ease-out'
             }}
           >
-            <h1 
+            <div 
               className="loader-main text-5xl sm:text-7xl md:text-9xl lg:text-[10rem] xl:text-[12rem] font-black tracking-tight text-center"
               style={{
                 fontFamily: 'Inter, system-ui, sans-serif',
@@ -141,7 +141,7 @@ export default function NeoLeafLoader() {
                   {char}
                 </span>
               ))}
-            </h1>
+            </div>
           </div>
         </div>
 

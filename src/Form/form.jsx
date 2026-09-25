@@ -67,9 +67,9 @@ export default function ResponsiveForm() {
         </button>
         <div className="w-full flex items-center justify-center p-6 sm:p-8 md:p-10 bg-black/70">
           <div className="w-full">
-            <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Get In Touch
-            </h1>
+            </h2>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>

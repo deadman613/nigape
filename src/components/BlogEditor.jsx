@@ -10,7 +10,7 @@ import { Table, TableRow, TableCell, TableHeader } from "@tiptap/extension-table
 import Underline from "@tiptap/extension-underline";
 
 const extensions = [
-  StarterKit,
+  StarterKit.configure({ heading: { levels: [2, 3, 4, 5, 6] } }),
   Placeholder.configure({ placeholder: "Write your blog content..." }),
   Link.configure({ openOnClick: false, autolink: true, linkOnPaste: true }),
   Image.configure({ inline: false }),
@@ -41,12 +41,6 @@ const controls = [
     isActive: (editor) => editor.isActive("underline"),
   },
   { separator: true },
-  {
-    label: "H1",
-    title: "Heading 1",
-    command: (editor) => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-    isActive: (editor) => editor.isActive("heading", { level: 1 }),
-  },
   {
     label: "H2",
     title: "Heading 2",

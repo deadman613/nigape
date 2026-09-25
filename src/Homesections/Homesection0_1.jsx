@@ -13,11 +13,11 @@ export default function AboutUsSection() {
             <span className="text-sm font-semibold text-purple-600 uppercase tracking-wider">1st</span>
             <div className="h-px bg-gray-700 flex-grow max-w-[100px]"></div>
           </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-8">
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-8">
             NIGAPE <span className="inline-block align-middle w-16 h-16 md:w-20 md:h-20 bg-gray-700 rounded-lg"></span> is<br />
             <span className="inline-block align-middle w-16 h-16 md:w-20 md:h-20 bg-gray-700 rounded-lg"></span> Known for<br />
             <span className="text-[#FF40EB]">Industry-Ready AI Training</span>
-          </h1>
+          </h2>
           <p className="text-sm text-gray-400 max-w-xs ml-auto">
             Campus + live online cohorts<br />
             <span className="text-gray-200 font-medium">India-first GenAI & Prompt Engineering institute</span><br />
